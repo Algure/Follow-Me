@@ -258,13 +258,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     onFocusChange: (hasFocus) {
                       setState(() => _linkInFocus=hasFocus);
                     },
-                    child: TextFormField(
+                    child: TextField(
                         controller: TextEditingController(
                             text: _link
                         ),
                         style: TextStyle(color: Colors.black),//kInputTextStyle,
                         textAlign: TextAlign.start,
                         autofocus: false,
+                        enabled: false,
                         onEditingComplete: (){
                           // setState(() {
                           //   _descFocus.unfocus();
@@ -288,65 +289,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   SizedBox(height: 20,),
                   MyButton(buttonColor: Colors.blue,
                     onPressed:() async {
-                  // ProgressHUD.of(context)!.show();
-                  //   try{
-                  //     _fname = _fname.trim();
-                  //     if (_fname == null || _fname.isEmpty) {
-                  //       ProgressHUD.of(context)!.dismiss();
-                  //       uShowErrorNotification ('First name cannot be empty');
-                  //       return;
-                  //     } else if (_fname.contains(' ')) {
-                  //       ProgressHUD.of(context)!.dismiss();
-                  //       uShowErrorNotification(
-                  //           'First name cannot contain white/empty space');
-                  //       return;
-                  //     }else if(_fname.length>nameLength){
-                  //       ProgressHUD.of(context)!.dismiss();
-                  //       uShowErrorNotification( 'First name length is too long');
-                  //       return;
-                  //     }
-                  //
-                  //     _sname = _sname.trim();
-                  //     if (_sname == null || _sname.isEmpty) {
-                  //       ProgressHUD.of(context)!.dismiss();
-                  //       uShowErrorNotification( 'Last/Sur name cannot be empty');
-                  //       return;
-                  //     } else if (_sname.contains(' ')) {
-                  //       ProgressHUD.of(context)!.dismiss();
-                  //       uShowErrorNotification(
-                  //           'Last/Sur name cannot contain white/empty space');
-                  //       return;
-                  //     }else if(_sname.length>nameLength){
-                  //       ProgressHUD.of(context)!.dismiss();
-                  //       uShowErrorNotification('Last name length is too long');
-                  //       return;
-                  //     }
-                  //
-                  //     _link = _link.trim();
-                  //     if (_link == null || _link.isEmpty) {
-                  //       ProgressHUD.of(context)!.dismiss();
-                  //       uShowErrorNotification('Twitter link cannot be empty');
-                  //       return;
-                  //     } else if (!(await canLaunch(_link))) {
-                  //       ProgressHUD.of(context)!.dismiss();
-                  //       showProgress(false);
-                  //   uShowErrorNotification( 'Invalid twitter link');
-                  //   return;
-                  //   }
-                  //
-                  //   if (!(await uCheckInternet())) {
-                  //     ProgressHUD.of(context)!.dismiss();
-                  //     uShowErrorNotification('No internet connection detected !');
-                  //     return;
-                  //   }
-                  //   await _updateProfile();
-                  //   uShowOkNotification('Profile updated');
-                  //   }catch(e){
-                  //   uShowErrorNotification( 'An error occured. Please check inputs.');
-                  //   print('error: ${e}');
-                  //   }
-                  //   ProgressHUD.of(context)!.dismiss();
-                      _uploadProfile();
+                       _uploadProfile();
                     },
                     textColor: Colors.white, text: 'Update', ),
 

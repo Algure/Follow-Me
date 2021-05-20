@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:follow_me/constants.dart';
 import 'package:follow_me/data_objects/profile.dart';
@@ -18,7 +19,7 @@ class ProfileLitem extends StatelessWidget {
       child: Material(
         elevation: 15,
         color: Colors.white,
-        borderRadius: BorderRadius.all(Radius.circular(10)),
+        borderRadius: BorderRadius.all(Radius.circular(20)),
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.all( Radius.circular(15))
@@ -53,7 +54,13 @@ class ProfileLitem extends StatelessWidget {
                   child: Text(profile.link??'', style: kNavTextStyle.copyWith(color: Colors.blue),),
                 ),
               ),
-              trailing: Image.asset(_getImageIcon(), height: 50, width: 50,),
+              trailing: Container(
+                height: 90,
+                width: 50,
+                child: Align(
+                    alignment:Alignment.bottomLeft,
+                    child: Image.asset(_getImageIcon(), height: 20, width: 20,)),
+              ),
             ),
           ),
         ),
