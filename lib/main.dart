@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:follow_me/screens/home_screen.dart';
 import 'package:overlay_support/overlay_support.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 void main() {
   runApp(MyApp());
@@ -18,6 +19,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
         home: MyHomePage(title: 'Home'),
+        builder: EasyLoading.init(),
       ),
     );
   }

@@ -16,28 +16,30 @@ class AzureSingle {
   }
 
   uploadProfile(Profile profile) async {
-    // String sendUrl = 'https://follow-me.search.windows.net/indexes/folloe-me/docs?api-version=2020-06-30-Preview';
-    String sendUrl = 'https://follow-me.search.windows.net/indexes/folloe-me/docs?api-version=2020-06-30-Preview&search=*&&api-key=$searchKey';
+    // String sendUrl = 'https://follow-me.search.windows.net/indexes/folloe-me/docs?api-version=2020-06-30-Preview&search=*';
+    // Request req = Request('GET', Uri.parse(sendUrl));
+    String sendUrl = 'https://follow-me.search.windows.net/indexes/folloe-me/docs/index?api-version=2020-06-30';
     Request req = Request('POST', Uri.parse(sendUrl));
     req.headers['Content-Type'] = 'application/json';
     // req.headers['Access-Control-Allow-Origin'] = '*';
     req.headers['api-key'] = searchKey;
     req.body =
-    '{"value":[{"@search.action": "upload","id":"${profile
-        .id}","name":"${profile.name}","age":${profile.age},"bio":"${profile
-        .bio}","pic":"${profile.pic}"}]}';
+    '{"value":[{"@search.action": "mergeOrUpload","id":"${profile.id}","name":"${profile.name}","age":${profile.age},"bio":"${profile.bio}","pic":"${profile.pic}"}]}';
     print(' started search upload');
-    await req.send().then((value) {
-      print('order upload result: ${value.statusCode},  ${value.reasonPhrase
-          .toString()}');
+    await req.send().then((value) async {
+      String message= await value.stream.bytesToString();
+      print('order upload result: ${value.statusCode},  ${message}');
       if (value.statusCode >= 400) throw Exception(
-          ' ${value.reasonPhrase.toString()}');
+          ' ${message}');
     });
+    //     .onError ((e,t) async {
+    //   print('internal error $e, trace $t');
+    //   throw '$e';
+    // });
   }
 
   Future<Profile?> fetchProfile(String id) async {
-    Response response = await get(Uri.parse(
-        'https://follow-me.search.windows.net/indexes/folloe-me/docs?api-version=2020-06-30-Preview&\$filter=id%20eq%20\'$id\''),
+    Response response = await get(Uri.parse('https://follow-me.search.windows.net/indexes/folloe-me/docs?api-version=2020-06-30&\$filter=link%20eq%20\'$id\''),
         headers:
         {'Content-Type': 'application/json',
           'api-key': searchKey});
@@ -54,9 +56,8 @@ class AzureSingle {
 
    Future<List<Profile>> getAllProfiles() async {
     List<Profile> prolist=[];
-    Response response = await get(Uri.parse(
-        'https://follow-me.search.windows.net/indexes/folloe-me/docs?api-version=2020-06-30-Preview&search=*'
-    ),
+    Response response = await get(
+        Uri.parse('https://follow-me.search.windows.net/indexes/folloe-me/docs?api-version=2020-06-30-Preview&search=*'),
         headers:
         {'Content-Type': 'application/json',
           'api-key': searchKey,

@@ -13,6 +13,7 @@ import 'package:follow_me/utitlity_functions.dart';
 import 'package:http/http.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:uuid/uuid.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import '../constants.dart';
 
@@ -47,7 +48,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     _setProfile();
-
+    uGetGoogleDate();
   }
 
   @override
@@ -98,6 +99,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 onChanged: (string){_fname=string;},
                                 autofocus: false,
                                 maxLength: nameLength,
+                                controller: TextEditingController(
+                                    text: _fname
+                                ),
                                 onEditingComplete: (){
                                   // setState(() {
                                   //   _fnameFocus.unfocus();
@@ -108,6 +112,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ],
                                 decoration: InputDecoration(
                                     filled: true,
+
 //                            prefixIcon: Icon(CupertinoIcons.person, color: Colors.white,),
                                     labelText: 'First name',
                                     labelStyle: TextStyle(
@@ -141,6 +146,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               child: TextFormField(
                                 onChanged: (string){_sname=string;},
                                 maxLength: nameLength,
+                                controller: TextEditingController(
+                                    text: _sname
+                                ),
                                 autofocus: false,
                                 onEditingComplete: (){
                                   // setState(() {
@@ -278,65 +286,67 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
                   SizedBox(height: 20,),
-                  MyButton(buttonColor: Colors.blue, onPressed:() async {
-                  ProgressHUD.of(context)!.show();
-                    try{
-                      _fname = _fname.trim();
-                      if (_fname == null || _fname.isEmpty) {
-                        ProgressHUD.of(context)!.dismiss();
-                        uShowErrorNotification ('First name cannot be empty');
-                        return;
-                      } else if (_fname.contains(' ')) {
-                        ProgressHUD.of(context)!.dismiss();
-                        uShowErrorNotification(
-                            'First name cannot contain white/empty space');
-                        return;
-                      }else if(_fname.length>nameLength){
-                        ProgressHUD.of(context)!.dismiss();
-                        uShowErrorNotification( 'First name length is too long');
-                        return;
-                      }
-
-                      _sname = _sname.trim();
-                      if (_sname == null || _sname.isEmpty) {
-                        ProgressHUD.of(context)!.dismiss();
-                        uShowErrorNotification( 'Last/Sur name cannot be empty');
-                        return;
-                      } else if (_sname.contains(' ')) {
-                        ProgressHUD.of(context)!.dismiss();
-                        uShowErrorNotification(
-                            'Last/Sur name cannot contain white/empty space');
-                        return;
-                      }else if(_sname.length>nameLength){
-                        ProgressHUD.of(context)!.dismiss();
-                        uShowErrorNotification('Last name length is too long');
-                        return;
-                      }
-
-                      _link = _link.trim();
-                      if (_link == null || _link.isEmpty) {
-                        ProgressHUD.of(context)!.dismiss();
-                        uShowErrorNotification('Twitter link cannot be empty');
-                        return;
-                      } else if (!(await canLaunch(_link))) {
-                        ProgressHUD.of(context)!.dismiss();
-                        showProgress(false);
-                    uShowErrorNotification( 'Invalid twitter link');
-                    return;
-                    }
-
-                    if (!(await uCheckInternet())) {
-                      ProgressHUD.of(context)!.dismiss();
-                      uShowErrorNotification('No internet connection detected !');
-                      return;
-                    }
-                    await _updateProfile();
-                    uShowOkNotification('Profile updated');
-                    }catch(e){
-                    uShowErrorNotification( 'An error occured. Please check inputs.');
-                    print('error: ${e}');
-                    }
-                    ProgressHUD.of(context)!.dismiss();
+                  MyButton(buttonColor: Colors.blue,
+                    onPressed:() async {
+                  // ProgressHUD.of(context)!.show();
+                  //   try{
+                  //     _fname = _fname.trim();
+                  //     if (_fname == null || _fname.isEmpty) {
+                  //       ProgressHUD.of(context)!.dismiss();
+                  //       uShowErrorNotification ('First name cannot be empty');
+                  //       return;
+                  //     } else if (_fname.contains(' ')) {
+                  //       ProgressHUD.of(context)!.dismiss();
+                  //       uShowErrorNotification(
+                  //           'First name cannot contain white/empty space');
+                  //       return;
+                  //     }else if(_fname.length>nameLength){
+                  //       ProgressHUD.of(context)!.dismiss();
+                  //       uShowErrorNotification( 'First name length is too long');
+                  //       return;
+                  //     }
+                  //
+                  //     _sname = _sname.trim();
+                  //     if (_sname == null || _sname.isEmpty) {
+                  //       ProgressHUD.of(context)!.dismiss();
+                  //       uShowErrorNotification( 'Last/Sur name cannot be empty');
+                  //       return;
+                  //     } else if (_sname.contains(' ')) {
+                  //       ProgressHUD.of(context)!.dismiss();
+                  //       uShowErrorNotification(
+                  //           'Last/Sur name cannot contain white/empty space');
+                  //       return;
+                  //     }else if(_sname.length>nameLength){
+                  //       ProgressHUD.of(context)!.dismiss();
+                  //       uShowErrorNotification('Last name length is too long');
+                  //       return;
+                  //     }
+                  //
+                  //     _link = _link.trim();
+                  //     if (_link == null || _link.isEmpty) {
+                  //       ProgressHUD.of(context)!.dismiss();
+                  //       uShowErrorNotification('Twitter link cannot be empty');
+                  //       return;
+                  //     } else if (!(await canLaunch(_link))) {
+                  //       ProgressHUD.of(context)!.dismiss();
+                  //       showProgress(false);
+                  //   uShowErrorNotification( 'Invalid twitter link');
+                  //   return;
+                  //   }
+                  //
+                  //   if (!(await uCheckInternet())) {
+                  //     ProgressHUD.of(context)!.dismiss();
+                  //     uShowErrorNotification('No internet connection detected !');
+                  //     return;
+                  //   }
+                  //   await _updateProfile();
+                  //   uShowOkNotification('Profile updated');
+                  //   }catch(e){
+                  //   uShowErrorNotification( 'An error occured. Please check inputs.');
+                  //   print('error: ${e}');
+                  //   }
+                  //   ProgressHUD.of(context)!.dismiss();
+                      _uploadProfile();
                     },
                     textColor: Colors.white, text: 'Update', ),
 
@@ -351,7 +361,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   _setProfile() async {
     showProgress(true);
-    Profile? prf= await AzureSingle().fetchProfile(_link);
+    Profile? prf;
+
     List<String> nameData= ((await uGetSharedPrefValue(kNameKey))??'').split(' ');
     if(nameData.length==2) {
       _fname = nameData[0];
@@ -360,6 +371,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
     _link= (await uGetSharedPrefValue(kLinkKey))??'';
     _tittle= (await uGetSharedPrefValue(kBioKey))??'';
     _age= (await uGetSharedPrefValue(kAgeKey))??'';
+    try {
+      prf = await AzureSingle().fetchProfile(_link);
+    }catch(e,t){
+      print('error: $e,  trace: $t');
+    }
     if(prf!=null){
       List<String> nameData= (( prf.name)??'').split(' ');
       if(nameData.length==2) {
@@ -374,6 +390,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       await uSetPrefsValue(kAgeKey,'$_age');
       await uSetPrefsValue(kLinkKey,_link);
     }
+    print('age: $_age, _tittle: $_tittle, _link: $_link, _fname:$_fname, _sname: $_sname');
     showProgress(false);
   }
 
@@ -403,6 +420,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<void> _uploadProfile() async {
+    showProgress(true);
     try{
     _fname = _fname.trim();
     if (_fname == null || _fname.isEmpty) {
@@ -461,11 +479,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
   showProgress(false);
   }
 
+  Future<void> uGetGoogleDate() async {
+      String url='https://google.com/';
+    var response=await get(Uri.parse(url));
+    String? dateBase = response.headers['date'];
+    print(dateBase);
+  }
+
   Future<void> _updateProfile() async {
     Profile mProfile = Profile()
+        ..id=generateRandomId()
         ..age= (_age.isNotEmpty)?int.tryParse(_age)??0:0
         ..name='$_fname $_sname'
-        ..id=_link
+        ..link=_link
         ..bio=_tittle
         ..pic='$imageIndex';
     await AzureSingle().uploadProfile(mProfile);
@@ -477,12 +503,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   String generateRandomId() {
     var uuid = Uuid();
-    return uuid.v1().replaceAll('-', '');
+    return 'a'+uuid.v1().replaceAll('-', '');
   }
 
   void showProgress(bool bool) {
-    // if(bool)_progress.;
-    // else _progress.dis();
+    if(bool)EasyLoading.show(status: 'loading...');
+    else EasyLoading.dismiss();
+    setState(() {
+
+    });
   }
 }
 

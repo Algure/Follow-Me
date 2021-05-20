@@ -28,6 +28,7 @@ dependencies:
   share: ^0.6.5+4
   azstore: ^1.0.0
   connectivity: ^3.0.3
+  flutter_easyloading: ^3.0.0
 #  firebase_database : ^4.3.0
   firebase_core: ^1.1.1
   autocomplete_textfield: ^1.7.3

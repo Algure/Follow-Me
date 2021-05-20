@@ -32,6 +32,7 @@ class _State extends State<DescriptionScreen> {
           builder: (context)=>SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Container(
                   margin: EdgeInsets.only(top: 50),
@@ -46,13 +47,13 @@ class _State extends State<DescriptionScreen> {
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.all(12.0),
-                  child: Text(widget.profile.bio??'', textAlign: TextAlign.start, style: TextStyle(color: Colors.black54, fontWeight: FontWeight.w900,           fontSize: 15),),
+                  child: Text(widget.profile.bio??'', textAlign: TextAlign.center, style: TextStyle(color: Colors.black54, fontWeight: FontWeight.w900,           fontSize: 15),),
                 ),
                 SizedBox(height: 50,),
                 MaterialButton(
                   padding: const EdgeInsets.all(12.0),
                   onPressed: () { openLink(); },
-                  child: Text(widget.profile.id??'', textAlign: TextAlign.start, style: TextStyle(color: Colors.blue, fontWeight: FontWeight.w900,           fontSize: 15),),
+                  child: Text(widget.profile.link??'', textAlign: TextAlign.start, style: TextStyle(color: Colors.blue, fontWeight: FontWeight.w900,           fontSize: 15),),
                 ),
 
               ],

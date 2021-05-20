@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 import 'package:follow_me/azure.dart';
 import 'package:follow_me/custom_widgets/profile_list.dart';
@@ -32,15 +33,18 @@ class _MyHomePageState extends State<MyHomePage> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: Text(widget.title, style: TextStyle(color: Colors.blue),),
+        title: Text('Follow Me', style: TextStyle(color: Colors.blue),),
         elevation: 0,
       ),
       body: ProgressHUD(
         child: Builder(
           builder: (context)=> Center(
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: proWidgets
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: proWidgets
+              ),
             ),
           ),
         ),
@@ -55,6 +59,12 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  Future<void> _loadProfiles() async {
+    List<Profile> proList= await AzureSingle().getAllProfiles();
+    for(Profile profile in proList)proWidgets.add(ProfileLitem(profile));
+
+  }
+
   void _goToProfilePage() {
     Navigator.push(context, MaterialPageRoute(builder: (context)=>ProfileScreen()));
   }
@@ -62,14 +72,19 @@ class _MyHomePageState extends State<MyHomePage> {
   _setProfiles() async {
     showProgress(true);
     List<Profile> proList= await AzureSingle().getAllProfiles();
+    proWidgets=[];
     for(Profile pro in proList){
+      if(pro==null) continue;
       proWidgets.add(ProfileLitem(pro));
     }
     showProgress(false);
   }
 
   void showProgress(bool bool) {
-    if(bool)_progress!.show();
-    else _progress!.dismiss();
+    if(bool)EasyLoading.show(status: 'loading...');
+    else EasyLoading.dismiss();
+    setState(() {
+
+    });
   }
 }

@@ -4,6 +4,7 @@ class Profile{
   int? age;
   String? bio;
   String? name;
+  String? link;
 
   Profile();
 
@@ -13,6 +14,7 @@ class Profile{
     age=int.tryParse(r['age'].toString())??0;
     bio=r['bio'];
     name=r['name'];
+    link=r['link'];
   }
 
 }
