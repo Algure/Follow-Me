@@ -31,15 +31,15 @@ class _MyHomePageState extends State<MyHomePage> {
   bool _inSearchMode=false;
 
   List<DropdownMenuItem<String>> _filterList=[
-    DropdownMenuItem<String>(child: Text( '1-10'), value: '1-10') ,
-    DropdownMenuItem<String>(child: Text('11-20',), value:'11-20') ,
-    DropdownMenuItem<String>(child: Text('21-30'), value:'21-30') ,
-    DropdownMenuItem<String>(child: Text('31-40'), value:'31-40') ,
-    DropdownMenuItem<String>(child: Text('41-50'), value:'41-50') ,
-    DropdownMenuItem<String>(child: Text('51-60'), value:'51-60') ,
-    DropdownMenuItem<String>(child: Text('61-70'), value:'61-70') ,
-    DropdownMenuItem<String>(child: Text('71-80'), value:'71-80') ,
-    DropdownMenuItem<String>(child: Text('90-100'), value:'90-100') ,
+    DropdownMenuItem<String>(child: Text( 'Age-range: 1-10'), value: '1-10') ,
+    DropdownMenuItem<String>(child: Text('Age-range: 11-20',), value:'11-20') ,
+    DropdownMenuItem<String>(child: Text('Age-range: 21-30'), value:'21-30') ,
+    DropdownMenuItem<String>(child: Text('Age-range: 31-40'), value:'31-40') ,
+    DropdownMenuItem<String>(child: Text('Age-range: 41-50'), value:'41-50') ,
+    DropdownMenuItem<String>(child: Text('Age-range: 51-60'), value:'51-60') ,
+    DropdownMenuItem<String>(child: Text('Age-range: 61-70'), value:'61-70') ,
+    DropdownMenuItem<String>(child: Text('Age-range: 71-80'), value:'71-80') ,
+    DropdownMenuItem<String>(child: Text('Age-range: 90-100'), value:'90-100') ,
     ];
 
   @override
@@ -54,14 +54,13 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         title: Hero(
-
             tag: 'fologo',
-            child: Image.asset('images/logo.png', color: Colors.blue, height: 50, width: 100,)),// Text('Follow Me', style: TextStyle(color: Colors.blue),),
+            child: Image.asset('images/logo.png', color: Colors.blue, height: 50, width: 150,)),// Text('Follow Me', style: TextStyle(color: Colors.blue),),
         elevation: 0,
         actions: [
           AnimatedContainer(
             height: 50,
-            width: _inSearchMode?MediaQuery.of(context).size.width*0.7:100,
+            width: _inSearchMode?MediaQuery.of(context).size.width*0.7:50,
             duration: Duration(milliseconds: 500),
             child: _inSearchMode?
               TextFormField(
@@ -104,11 +103,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 : MaterialButton(onPressed: () { _setSearchMode(true); },
               child: Icon(Icons.search, color: Colors.blue, size: 25,)),
           ),
-          SizedBox(width: 20,),
           DropdownButtonHideUnderline(
             child: ButtonTheme(
               alignedDropdown: true,
-              padding: EdgeInsets.only(left: 20, right: 20, bottom: 20),
+              padding: EdgeInsets.only( bottom: 20),
               child: DropdownButton <String>(
                   dropdownColor: Colors.white,
                   isDense: true,
@@ -125,7 +123,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     // });
                   }),
             ),
-          )
+          ),
+          SizedBox(width: 30,),
 
         ],
       ),
