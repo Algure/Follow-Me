@@ -30,6 +30,17 @@ class _MyHomePageState extends State<MyHomePage> {
 
   bool _inSearchMode=false;
 
+  List<DropdownMenuItem<String>> _filterList=[
+    DropdownMenuItem<String>(child: Text( '1-10'), value: '1-10') ,
+    DropdownMenuItem<String>(child: Text('11-20',), value:'11-20') ,
+    DropdownMenuItem<String>(child: Text('21-30'), value:'21-30') ,
+    DropdownMenuItem<String>(child: Text('31-40'), value:'31-40') ,
+    DropdownMenuItem<String>(child: Text('41-50'), value:'41-50') ,
+    DropdownMenuItem<String>(child: Text('51-60'), value:'51-60') ,
+    DropdownMenuItem<String>(child: Text('61-70'), value:'61-70') ,
+    DropdownMenuItem<String>(child: Text('71-80'), value:'71-80') ,
+    DropdownMenuItem<String>(child: Text('90-100'), value:'90-100') ,
+    ];
 
   @override
   void initState() {
@@ -93,8 +104,29 @@ class _MyHomePageState extends State<MyHomePage> {
                 : MaterialButton(onPressed: () { _setSearchMode(true); },
               child: Icon(Icons.search, color: Colors.blue, size: 25,)),
           ),
+          SizedBox(width: 20,),
+          DropdownButtonHideUnderline(
+            child: ButtonTheme(
+              alignedDropdown: true,
+              padding: EdgeInsets.only(left: 20, right: 20, bottom: 20),
+              child: DropdownButton <String>(
+                  dropdownColor: Colors.white,
+                  isDense: true,
+                  icon: Icon(Icons.filter_list_sharp, color: Colors.blue, size: 24,),
+                  style: TextStyle(color: Colors.black),
+                  items: this._filterList,
+                  onChanged: (value){
+                    _filterDb(value!);
+                    // _chosenOrderFilter=value;
+                    // Provider.of<CustomerOrderProvider>(context, listen: false).filterOrderStats(value);
+                    // print('selected ${value.status} ${value.statusCode}');
+                    // setState(() {
+                    //   _filterValue=value.status;
+                    // });
+                  }),
+            ),
+          )
 
-          SizedBox(width: 20,)
         ],
       ),
       body: ProgressHUD(
@@ -180,5 +212,23 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       _inSearchMode=bool;
     });
+  }
+
+  Future<void> _filterDb(String value) async {
+    List<String> range= value.split('-');
+    if(range.length!=2)return;
+    showProgress(true);
+    try {
+      List<Profile> proList = await AzureSingle().filterProfiles(value);
+      proWidgets = [];
+      for (Profile pro in proList) {
+        if (pro == null) continue;
+        proWidgets.add(ProfileLitem(pro));
+      }
+    }catch(e,t){
+      uShowErrorNotification('An error occured. Drag to refresh.');
+      print(' profile fetch error: $e, trace: $t');
+    }
+    showProgress(false);
   }
 }

@@ -94,4 +94,23 @@ class AzureSingle {
     }
     return prolist;
   }
+
+  filterProfiles(String value) async {
+    List<String> range= value.split('-');
+    if(range.length!=2)return;
+    List<Profile> prolist=[];
+    Response response = await get(Uri.parse('https://follow-me.search.windows.net/indexes/folloe-me/docs?api-version=2020-06-30&\$filter=age%20ge%20${range[0]}%20and%20age%20le${range[1]}'),
+        headers:
+        {'Content-Type': 'application/json',
+          'api-key': searchKey});
+    print('search status response: ${response.body}');
+    if (response != null && response.body != null) {
+      var res = jsonDecode(response.body);
+      for(var data in res['value']){
+        Profile pro= Profile.fromMap(data);
+        if(pro!=null)prolist.add(pro);
+      }
+    }
+    return prolist;
+  }
 }
