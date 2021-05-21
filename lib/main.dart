@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:follow_me/screens/home_screen.dart';
+import 'package:follow_me/screens/login_screen.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
           primaryColor: Colors.white,
           primarySwatch: Colors.blue,
         ),
-        home: MyHomePage(title: 'Home'),
+        home: LoginScreen(),//MyHomePage(title: 'Home'),
         builder: EasyLoading.init(),
       ),
     );

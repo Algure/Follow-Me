@@ -6,6 +6,8 @@ const kNameKey='kNameKey';
 const kBioKey='kBioKey';
 const kAgeKey='kAgeKey';
 const kLinkKey='kLinkKey';
+const kIdkey='kIdkey';
+const kPickey='kPickey';
 
 const kHintStyle= TextStyle(
     color: Colors.grey

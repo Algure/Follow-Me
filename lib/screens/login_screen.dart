@@ -22,57 +22,89 @@ class _LoginScreenState extends State<LoginScreen> {
   String? _iconString;
   Widget _socialIcon=SizedBox.shrink();
 
+  var selected=false;
+
+
+  @override
+  void initState() {
+
+  }
+
+
+  @override
+  void didChangeDependencies() {
+    waitAndSetTrueAnim();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Focus(
-            onFocusChange: (hasFocus) {
-              setState(() => _linkInFocus=hasFocus);
-            },
-            child: TextFormField(
-                controller: TextEditingController(
-                    text: _link,
+      body: Padding(
+        padding: const EdgeInsets.all(18.0),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Hero(
+                tag: 'fologo',
+                child: AnimatedContainer(
+                  width: selected ? 200.0 : 0.0,
+                  height: selected ? 100.0 : 0.0,
+                  // color: Colors.red : Colors.blue,
+                  alignment:Alignment.center,
+                  duration: Duration(milliseconds: 2000) ,
+                  curve: Curves.fastLinearToSlowEaseIn,
+                  child: Image.asset('images/logo.png', color: Colors.blue, height: 75, width: 300,),
                 ),
-                style: TextStyle(color: Colors.black),//kInputTextStyle,
-                textAlign: TextAlign.start,
-                autofocus: false,
-                onEditingComplete: (){
-                  // setState(() {
-                  //   _descFocus.unfocus();
-                  // });
+              ),
+              SizedBox(height: 20,),
+
+              Focus(
+                onFocusChange: (hasFocus) {
+                  setState(() => _linkInFocus=hasFocus);
                 },
-                onChanged: (text){
-                  _link=text;
-                  _setSocialIcon();
-                  },
-                textInputAction: TextInputAction.next,
-                decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.white,
-                    labelText: 'Please enter your social link (Twitter link)',
-                    labelStyle: TextStyle(
-                        color:_linkInFocus?hintSelectedColor:hintColor
+                child: TextFormField(
+                    controller: TextEditingController(
+                        text: _link,
                     ),
-                    suffixIcon: _socialIcon,
-                    focusedBorder: kLinedFocusedBorder,
-                    enabledBorder: kLinedBorder,
-                    disabledBorder: kLinedBorder
-                )
-            ),
+                    style: TextStyle(color: Colors.black),//kInputTextStyle,
+                    textAlign: TextAlign.start,
+                    autofocus: false,
+                    onEditingComplete: (){
+                      // setState(() {
+                      //   _descFocus.unfocus();
+                      // });
+                    },
+                    onChanged: (text){
+                      _link=text;
+                      _setSocialIcon();
+                      },
+                    textInputAction: TextInputAction.next,
+                    decoration: InputDecoration(
+                        filled: true,
+                        fillColor: Colors.white,
+                        labelText: 'Please enter your social link (Twitter link)',
+                        labelStyle: TextStyle(
+                            color:_linkInFocus?hintSelectedColor:hintColor
+                        ),
+                        suffixIcon: Padding(padding: EdgeInsets.all(5),child: _socialIcon),
+                        focusedBorder: kLinedFocusedBorder,
+                        enabledBorder: kLinedBorder,
+                        disabledBorder: kLinedBorder
+                    )
+                ),
+              ),
+              SizedBox(height: 20,),
+              MyButton(buttonColor: Colors.blue,
+                onPressed:() async {
+                  _login();
+                },
+                textColor: Colors.white, text: 'Proceed', ),
+            ],
           ),
-          SizedBox(height: 20,),
-          MyButton(buttonColor: Colors.blue,
-            onPressed:() async {
-              _login();
-            },
-            textColor: Colors.white, text: 'Proceed', ),
-        ],
+        ),
       ),
     );
   }
@@ -127,6 +159,8 @@ class _LoginScreenState extends State<LoginScreen> {
     String fname='';
     String sname='';
     String? age='';
+    String? id='';
+    String? pic='';
     try {
       prf = await AzureSingle().fetchProfile(_link);
     }catch(e,t){
@@ -139,15 +173,18 @@ class _LoginScreenState extends State<LoginScreen> {
         sname = nameData[1];
         await uSetPrefsValue(kNameKey,'$fname $sname');
       }
-      // _link= prf.id!;
+      id= prf.id!;
       tittle= prf.bio!;
       age= prf.age!=null?'${prf.age}':'0';
+      pic= prf.pic;
       await uSetPrefsValue(kBioKey,tittle);
       await uSetPrefsValue(kAgeKey,'$age');
+      await uSetPrefsValue(kIdkey,'$id');
+      await uSetPrefsValue(kPickey,'${prf.pic}');
     }
     await uSetPrefsValue(kLinkKey,_link);
 
-    print('age: $age, _tittle: $tittle, _link: $_link, _fname:$fname, _sname: $sname');
+    print('age: $age, _tittle: $tittle, _link: $_link, _fname:$fname, _sname: $sname, pic: $pic');
     showProgress(false);
     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>MyHomePage(title: 'Home',)));
   }
@@ -166,5 +203,13 @@ class _LoginScreenState extends State<LoginScreen> {
       return 'images/twitter.png';
     }
     return null;
+  }
+
+  void waitAndSetTrueAnim() {
+    Future.delayed(Duration(seconds: 1),(){
+     setState(() {
+       selected=true;
+     });
+    });
   }
 }

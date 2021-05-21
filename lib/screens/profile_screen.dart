@@ -314,6 +314,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
     _link= (await uGetSharedPrefValue(kLinkKey))??'';
     _tittle= (await uGetSharedPrefValue(kBioKey))??'';
     _age= (await uGetSharedPrefValue(kAgeKey))??'';
+    String picData=(await uGetSharedPrefValue(kPickey))??'';
+    imageIndex= int.tryParse(picData)??0;
+
     try {
       prf = await AzureSingle().fetchProfile(_link);
     }catch(e,t){
@@ -326,14 +329,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
         _sname = nameData[1];
         await uSetPrefsValue(kNameKey,'$_fname $_sname');
       }
+      imageIndex= int.tryParse(prf.pic.toString())??0;
+      print('pic: ${prf.pic}');
       // _link= prf.id!;
-      _tittle= prf.bio!;
-      _age= prf.age!=null?'${prf.age}':'0';
+      _tittle= prf.bio!.toString().replaceAll('null', '');
+      _age= (prf.age!=null?'${prf.age}':'0').replaceAll('null', '');;
+
       await uSetPrefsValue(kBioKey,_tittle);
       await uSetPrefsValue(kAgeKey,'$_age');
       await uSetPrefsValue(kLinkKey,_link);
     }
-    print('age: $_age, _tittle: $_tittle, _link: $_link, _fname:$_fname, _sname: $_sname');
+    _tittle= _tittle.replaceAll('null', '');
+    _age= _age.replaceAll('null', '');
+
+    print('age: $_age, _tittle: $_tittle, _link: $_link, _fname:$_fname, _sname: $_sname , image: $imageIndex}');
     showProgress(false);
   }
 
@@ -431,7 +440,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Future<void> _updateProfile() async {
     Profile mProfile = Profile()
-        ..id=generateRandomId()
+        ..id= await getId()
         ..age= (_age.isNotEmpty)?int.tryParse(_age)??0:0
         ..name='$_fname $_sname'
         ..link=_link
@@ -440,6 +449,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     await AzureSingle().uploadProfile(mProfile);
     await uSetPrefsValue(kNameKey,'$_fname $_sname');
     await uSetPrefsValue(kBioKey,_tittle);
+    await uSetPrefsValue(kIdkey,mProfile.id);
     await uSetPrefsValue(kAgeKey,'$_age');
     await uSetPrefsValue(kLinkKey,_link);
   }
@@ -455,6 +465,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
     setState(() {
 
     });
+  }
+
+  Future<String?> getId() async{
+    String id= (await uGetSharedPrefValue(kIdkey))??'';
+    if(id.length<5)return generateRandomId();
+    return id;
   }
 }
 

@@ -24,8 +24,8 @@ class AzureSingle {
     // req.headers['Access-Control-Allow-Origin'] = '*';
     req.headers['api-key'] = searchKey;
     req.body =
-    '{"value":[{"@search.action": "mergeOrUpload","id":"${profile.id}","name":"${profile.name}","age":${profile.age},"bio":"${profile.bio}","pic":"${profile.pic}"}]}';
-    print(' started search upload');
+    '{"value":[{"@search.action": "mergeOrUpload","id":"${profile.id}","name":"${profile.name}","link":"${profile.link}","age":${profile.age},"bio":"${profile.bio}","pic":"${profile.pic}"}]}';
+    print(' started search upload ${req.body}');
     await req.send().then((value) async {
       String message= await value.stream.bytesToString();
       print('order upload result: ${value.statusCode},  ${message}');
@@ -74,4 +74,24 @@ class AzureSingle {
     }
     return prolist;
    }
+
+  Future<List<Profile>> searchProfiles(String value) async {
+    List<Profile> prolist=[];
+    Response response = await get(
+        Uri.parse('https://follow-me.search.windows.net/indexes/folloe-me/docs?api-version=2020-06-30-Preview&search=$value&searchFields=name,bio'),
+        headers:
+        {'Content-Type': 'application/json',
+          'api-key': searchKey,
+          'Access-Control-Allow-Origin':'*'
+        });
+    print('search status response: ${response.body}');
+    if (response != null && response.body != null) {
+      var res = jsonDecode(response.body);
+      for(var data in res['value']){
+        Profile pro= Profile.fromMap(data);
+        if(pro!=null)prolist.add(pro);
+      }
+    }
+    return prolist;
+  }
 }
