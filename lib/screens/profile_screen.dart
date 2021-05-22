@@ -323,6 +323,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       print('error: $e,  trace: $t');
     }
     if(prf!=null){
+      print('profile: $prf');
       List<String> nameData= (( prf.name)??'').split(' ');
       if(nameData.length==2) {
         _fname = nameData[0];

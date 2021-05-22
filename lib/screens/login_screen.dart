@@ -225,6 +225,12 @@ class _LoginScreenState extends State<LoginScreen> {
         uShowErrorNotification('Password is too short');
         return;
       }
+      Profile? tprf = await AzureSingle().fetchProfile(_link);
+      if(tprf!=null && tprf.id!=null && tprf.id!.length>5){
+        showProgress(false);
+        uShowErrorNotification('This link is registered');
+        return;
+      }
       Profile mProfile = Profile()
         ..id = await getId()
         ..age = 0
@@ -316,6 +322,7 @@ class _LoginScreenState extends State<LoginScreen> {
         print(
             'age: $age, _tittle: $tittle, _link: $_link, _fname:$fname, _sname: $sname, pic: $pic');
         String savedPass = await AzureSingle().getPassword(id);
+        print('saved: $savedPass, password:$_password');
         if (savedPass != _password) throw "Wrong password";
 
         await uSetPrefsValue(kBioKey, tittle);
@@ -326,8 +333,9 @@ class _LoginScreenState extends State<LoginScreen> {
         showProgress(false);
         Navigator.pushReplacement(context,
             MaterialPageRoute(builder: (context) => MyHomePage(title: 'Home',)));
+      }else{
+        throw 'Profile not found.';
       }
-      throw 'Profile not found.';
     }catch(e,t){
       print('Error: $e, trace: $t');
       if(e.toString().contains('Wrong password'))uShowErrorNotification('Wrong password !');

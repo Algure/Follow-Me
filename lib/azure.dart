@@ -79,7 +79,7 @@ class AzureSingle {
   Future<List<Profile>> searchProfiles(String value) async {
     List<Profile> prolist=[];
     Response response = await get(
-        Uri.parse('https://follow-me.search.windows.net/indexes/folloe-me/docs?api-version=2020-06-30-Preview&search=$value&searchFields=name,bio&queryType=semantic'),
+        Uri.parse('https://follow-me.search.windows.net/indexes/folloe-me/docs?api-version=2020-06-30-Preview&search=$value&searchFields=name,bio'),
         headers:
         {'Content-Type': 'application/json',
           'api-key': searchKey,
@@ -128,8 +128,10 @@ class AzureSingle {
   Future<String> getPassword(String id) async {
     AzureStorage astore= AzureStorage.parse(connectionString);
     var result= await astore.getBlob('password/$id');
-    if(result.statusCode>=400) return 'An error occured';
+    // print('id: $id');
     String message= await result.stream.bytesToString();
+    print('fetch: $message');
+    if(result.statusCode>=400) throw 'An error occured';
     return message;
   }
 }

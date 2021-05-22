@@ -17,4 +17,8 @@ class Profile{
     link=r['link'];
   }
 
+  @override
+  String toString() {
+    return 'id: $id, pic: $pic,, age: $age, bio: $bio, name: $name, link:$link';
+  }
 }
