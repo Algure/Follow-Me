@@ -60,7 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
         actions: [
           AnimatedContainer(
             height: 50,
-            width: _inSearchMode?MediaQuery.of(context).size.width*0.7:50,
+            width: _inSearchMode?MediaQuery.of(context).size.width*0.6:50,
             duration: Duration(milliseconds: 500),
             child: _inSearchMode?
               TextFormField(
@@ -103,28 +103,36 @@ class _MyHomePageState extends State<MyHomePage> {
                 : MaterialButton(onPressed: () { _setSearchMode(true); },
               child: Icon(Icons.search, color: Colors.blue, size: 25,)),
           ),
-          DropdownButtonHideUnderline(
-            child: ButtonTheme(
-              alignedDropdown: true,
-              padding: EdgeInsets.only( bottom: 20),
-              child: DropdownButton <String>(
-                  dropdownColor: Colors.white,
-                  isDense: true,
-                  icon: Icon(Icons.filter_list_sharp, color: Colors.blue, size: 24,),
-                  style: TextStyle(color: Colors.black),
-                  items: this._filterList,
-                  onChanged: (value){
-                    _filterDb(value!);
-                    // _chosenOrderFilter=value;
-                    // Provider.of<CustomerOrderProvider>(context, listen: false).filterOrderStats(value);
-                    // print('selected ${value.status} ${value.statusCode}');
-                    // setState(() {
-                    //   _filterValue=value.status;
-                    // });
-                  }),
+          Container(
+            constraints: BoxConstraints(
+              maxWidth: 45,
+              maxHeight: 50
+            ),
+            child: DropdownButtonHideUnderline(
+              child: ButtonTheme(
+                minWidth: 30,
+                height: 50,
+                alignedDropdown: true,
+                // padding: EdgeInsets.only( bottom: 20),
+                child: DropdownButton <String>(
+                    dropdownColor: Colors.white,
+                    isDense: true,
+                    icon: Icon(Icons.filter_list_sharp, color: Colors.blue, size: 24,),
+                    style: TextStyle(color: Colors.black),
+                    items: this._filterList,
+                    onChanged: (value){
+                      _filterDb(value!);
+                      // _chosenOrderFilter=value;
+                      // Provider.of<CustomerOrderProvider>(context, listen: false).filterOrderStats(value);
+                      // print('selected ${value.status} ${value.statusCode}');
+                      // setState(() {
+                      //   _filterValue=value.status;
+                      // });
+                    }),
+              ),
             ),
           ),
-          SizedBox(width: 30,),
+          SizedBox(width: 10,),
 
         ],
       ),

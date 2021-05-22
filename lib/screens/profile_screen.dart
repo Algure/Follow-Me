@@ -82,7 +82,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       items: _getAvatarChoices()
                       , options: CarouselOptions(height: 120,
                       enlargeCenterPage: true,
-                      viewportFraction: 0.1
+                      viewportFraction: MediaQuery.of(context).size.width>500? 0.1:0.4
                   )),
                   Container(
                     height: 70,

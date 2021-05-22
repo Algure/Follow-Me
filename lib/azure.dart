@@ -1,6 +1,7 @@
 
 import 'dart:convert';
 
+import 'package:azstore/azstore.dart';
 import 'package:follow_me/data_objects/profile.dart';
 import 'package:follow_me/keys.dart';
 import 'package:follow_me/screens/profile_screen.dart';
@@ -78,7 +79,7 @@ class AzureSingle {
   Future<List<Profile>> searchProfiles(String value) async {
     List<Profile> prolist=[];
     Response response = await get(
-        Uri.parse('https://follow-me.search.windows.net/indexes/folloe-me/docs?api-version=2020-06-30-Preview&search=$value&searchFields=name,bio'),
+        Uri.parse('https://follow-me.search.windows.net/indexes/folloe-me/docs?api-version=2020-06-30-Preview&search=$value&searchFields=name,bio&queryType=semantic'),
         headers:
         {'Content-Type': 'application/json',
           'api-key': searchKey,
@@ -112,5 +113,23 @@ class AzureSingle {
       }
     }
     return prolist;
+  }
+
+  savePassword(String id, String password) async {
+    AzureStorage astore= AzureStorage.parse(connectionString);
+    var result= await astore.getBlob('password/$id');
+    if(result.statusCode>=400){
+      await astore.putBlob('password/$id', contentType: 'application/json', body: password);
+      return;
+    }
+    throw 'Id already exists.';
+  }
+
+  Future<String> getPassword(String id) async {
+    AzureStorage astore= AzureStorage.parse(connectionString);
+    var result= await astore.getBlob('password/$id');
+    if(result.statusCode>=400) return 'An error occured';
+    String message= await result.stream.bytesToString();
+    return message;
   }
 }
