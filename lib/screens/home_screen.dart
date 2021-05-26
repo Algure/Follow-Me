@@ -120,8 +120,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     // _chosenOrderFilter=value;
                     // Provider.of<CustomerOrderProvider>(context, listen: false).filterOrderStats(value);
                     // print('selected ${value.status} ${value.statusCode}');
-                    // setState(() {n
-
+                    // setState(() {
                     //   _filterValue=value.status;
                     // });
                   }),

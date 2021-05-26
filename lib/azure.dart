@@ -79,20 +79,20 @@ class AzureSingle {
   Future<List<Profile>> searchProfiles(String value) async {
     List<Profile> prolist=[];
 
-    // Response response = await get(
-    //     Uri.parse('$baseEndPoint/indexes/folloe-me/docs?api-version=2020-06-30-Preview&search=$value&queryType=semantic&searchFields=name,bio'),
-    // headers:
-    // {'Content-Type': 'application/json',
-    // 'api-key': searchKey,
-    // 'Access-Control-Allow-Origin':'*'
-    // });
-        Response response = await get(
-        Uri.parse('$baseEndPoint/indexes/folloe-me/docs?api-version=2020-06-30-Preview&search=$value&queryType=semantic&queryLanguage=en-us&searchFields=name,bio'),
-        headers:
-        {'Content-Type': 'application/json',
-          'api-key': searchKey,
-          'Access-Control-Allow-Origin':'*'
-        });
+    Response response = await get(
+        Uri.parse('$baseEndPoint/indexes/folloe-me/docs?api-version=2020-06-30-Preview&search=$value&searchFields=name,bio'),
+    headers:
+    {'Content-Type': 'application/json',
+    'api-key': searchKey,
+    'Access-Control-Allow-Origin':'*'
+    });
+    //     Response response = await get(
+    //     Uri.parse('$baseEndPoint/indexes/folloe-me/docs?api-version=2020-06-30-Preview&search=$value&queryType=semantic&queryLanguage=en-us&searchFields=name,bio'),
+    //     headers:
+    //     {'Content-Type': 'application/json',
+    //       'api-key': searchKey,
+    //       'Access-Control-Allow-Origin':'*'
+    //     });
     print('search status response: ${response.body}');
     if (response != null && response.body != null) {
       var res = jsonDecode(response.body);
