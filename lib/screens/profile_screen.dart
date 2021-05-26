@@ -43,8 +43,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   bool _snameInFocus=false;
   bool _linkInFocus=false;
 
-
-
   @override
   void initState() {
     _setProfile();
@@ -82,7 +80,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       items: _getAvatarChoices()
                       , options: CarouselOptions(height: 120,
                       enlargeCenterPage: true,
-                      viewportFraction: MediaQuery.of(context).size.width>500? 0.1:0.4
+                      viewportFraction: 0.3,//MediaQuery.of(context).size.width>500? 0.1:0.4
                   )),
                   Container(
                     height: 70,
@@ -292,7 +290,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                        _uploadProfile();
                     },
                     textColor: Colors.white, text: 'Update', ),
-
                 ],
               ),
             ),

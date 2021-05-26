@@ -266,7 +266,7 @@ class _LoginScreenState extends State<LoginScreen> {
   _login() async {
     showProgress(true);
     try {
-      _link = _link.trim();
+      _link = _link.trim().toLowerCase();
       if (_link == null || _link.isEmpty) {
         showProgress(false);
         uShowErrorNotification('Social link cannot be empty');

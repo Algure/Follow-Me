@@ -128,7 +128,6 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
           SizedBox(width: 10,),
-
         ],
       ),
       body: ProgressHUD(
@@ -147,7 +146,6 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
         ),
-
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _goToProfilePage,
@@ -157,7 +155,6 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
   }
-
 
   void _goToProfilePage() {
     Navigator.push(context, MaterialPageRoute(builder: (context)=>ProfileScreen()));

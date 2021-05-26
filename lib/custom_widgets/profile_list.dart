@@ -49,10 +49,7 @@ class ProfileLitem extends StatelessWidget {
                 height: double.maxFinite,
                 alignment: Alignment.centerLeft,
                 padding: EdgeInsets.only(bottom: 8),
-                child: GestureDetector(
-                  onTap: _launchTwitter,
-                  child: Text(profile.bio??'', overflow: TextOverflow.ellipsis, style: kNavTextStyle.copyWith(color: Colors.grey),),
-                ),
+                child: Text(profile.bio??'', overflow: TextOverflow.ellipsis, style: kNavTextStyle.copyWith(color: Colors.grey),),
               ),
               trailing: Container(
                 height: 90,

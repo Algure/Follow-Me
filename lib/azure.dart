@@ -19,7 +19,7 @@ class AzureSingle {
   uploadProfile(Profile profile) async {
     // String sendUrl = 'https://follow-me.search.windows.net/indexes/folloe-me/docs?api-version=2020-06-30-Preview&search=*';
     // Request req = Request('GET', Uri.parse(sendUrl));
-    String sendUrl = 'https://follow-me.search.windows.net/indexes/folloe-me/docs/index?api-version=2020-06-30';
+    String sendUrl = '$baseEndPoint/indexes/folloe-me/docs/index?api-version=2020-06-30';
     Request req = Request('POST', Uri.parse(sendUrl));
     req.headers['Content-Type'] = 'application/json';
     // req.headers['Access-Control-Allow-Origin'] = '*';
@@ -40,7 +40,7 @@ class AzureSingle {
   }
 
   Future<Profile?> fetchProfile(String id) async {
-    Response response = await get(Uri.parse('https://follow-me.search.windows.net/indexes/folloe-me/docs?api-version=2020-06-30&\$filter=link%20eq%20\'$id\''),
+    Response response = await get(Uri.parse('$baseEndPoint/indexes/folloe-me/docs?api-version=2020-06-30&\$filter=link%20eq%20\'$id\''),
         headers:
         {'Content-Type': 'application/json',
           'api-key': searchKey});
@@ -58,7 +58,7 @@ class AzureSingle {
    Future<List<Profile>> getAllProfiles() async {
     List<Profile> prolist=[];
     Response response = await get(
-        Uri.parse('https://follow-me.search.windows.net/indexes/folloe-me/docs?api-version=2020-06-30-Preview&search=*'),
+        Uri.parse('$baseEndPoint/indexes/folloe-me/docs?api-version=2020-06-30-Preview&search=*'),
         headers:
         {'Content-Type': 'application/json',
           'api-key': searchKey,
@@ -78,8 +78,16 @@ class AzureSingle {
 
   Future<List<Profile>> searchProfiles(String value) async {
     List<Profile> prolist=[];
-    Response response = await get(
-        Uri.parse('https://follow-me.search.windows.net/indexes/folloe-me/docs?api-version=2020-06-30-Preview&search=$value&searchFields=name,bio'),
+
+    // Response response = await get(
+    //     Uri.parse('$baseEndPoint/indexes/folloe-me/docs?api-version=2020-06-30-Preview&search=$value&queryType=semantic&searchFields=name,bio'),
+    // headers:
+    // {'Content-Type': 'application/json',
+    // 'api-key': searchKey,
+    // 'Access-Control-Allow-Origin':'*'
+    // });
+        Response response = await get(
+        Uri.parse('$baseEndPoint/indexes/folloe-me/docs?api-version=2020-06-30-Preview&search=$value&queryType=semantic&queryLanguage=en-us&searchFields=name,bio'),
         headers:
         {'Content-Type': 'application/json',
           'api-key': searchKey,
@@ -100,7 +108,7 @@ class AzureSingle {
     List<String> range= value.split('-');
     if(range.length!=2)return;
     List<Profile> prolist=[];
-    Response response = await get(Uri.parse('https://follow-me.search.windows.net/indexes/folloe-me/docs?api-version=2020-06-30&\$filter=age%20ge%20${range[0]}%20and%20age%20le%20${range[1]}'),
+    Response response = await get(Uri.parse('$baseEndPoint/indexes/folloe-me/docs?api-version=2020-06-30&\$filter=age%20ge%20${range[0]}%20and%20age%20le%20${range[1]}'),
         headers:
         {'Content-Type': 'application/json',
           'api-key': searchKey});
