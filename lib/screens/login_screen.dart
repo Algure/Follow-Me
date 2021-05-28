@@ -161,6 +161,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   ]
               ),
+              Spacer(),
+              Text('Powered by Azure', style:  TextStyle(color: Colors.blue.shade900, fontSize: 12),),
+              SizedBox(height: 20,),
+
             ],
           ),
         ),

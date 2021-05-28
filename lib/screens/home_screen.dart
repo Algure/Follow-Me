@@ -173,10 +173,10 @@ class _MyHomePageState extends State<MyHomePage> {
         // applicationLegalese: 'Developed by Algure',
         applicationIcon:Container(child: Image.asset('images/logo.png',height: 100, width: 100,),),
         children: [
-          SizedBox(height: 20,),
-          Text('Powered by Azure', style: TextStyle(fontSize: 10,color: Colors.blue.shade900),),
-          SizedBox(height: 20,),
+           SizedBox(height: 20,),
           Text('Developed by Algure', style: TextStyle(fontSize: 10,color: Colors.grey),),
+          SizedBox(height: 20,),
+          Text('Powered by Azure', style: TextStyle(fontSize: 8,color: Colors.blue.shade900),),
           Container(
             alignment: Alignment.center,
             color: Colors.transparent,
