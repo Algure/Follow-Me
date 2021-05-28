@@ -8,6 +8,7 @@ const kAgeKey='kAgeKey';
 const kLinkKey='kLinkKey';
 const kIdkey='kIdkey';
 const kPickey='kPickey';
+const kPassKey='kPassKey';
 
 const kHintStyle= TextStyle(
     color: Colors.grey

@@ -25,6 +25,7 @@ class _MyHomePageState extends State<MyHomePage> {
   var _progress;
 
   RefreshController _rController= RefreshController(initialRefresh: false);
+  GlobalKey _dropdownButtonKey = GlobalKey(debugLabel: 'GlobalDropdownKey');
 
   String searchText='';
 
@@ -41,6 +42,8 @@ class _MyHomePageState extends State<MyHomePage> {
     DropdownMenuItem<String>(child: Text('Age-range: 71-80'), value:'71-80') ,
     DropdownMenuItem<String>(child: Text('Age-range: 90-100'), value:'90-100') ,
     ];
+
+  bool _inFilterMode=false;
 
   @override
   void initState() {
@@ -63,7 +66,7 @@ class _MyHomePageState extends State<MyHomePage> {
             width: _inSearchMode?MediaQuery.of(context).size.width*0.6:50,
             duration: Duration(milliseconds: 500),
             child: _inSearchMode?
-              TextFormField(
+                TextFormField(
                 controller: TextEditingController(
                   text: searchText,
                 ),
@@ -103,29 +106,31 @@ class _MyHomePageState extends State<MyHomePage> {
                 : MaterialButton(onPressed: () { _setSearchMode(true); },
               child: Icon(Icons.search, color: Colors.blue, size: 25,)),
           ),
-          DropdownButtonHideUnderline(
-            child: ButtonTheme(
-              minWidth: 10,
-              height: 100,
-              alignedDropdown: true,
-              // padding: EdgeInsets.only( bottom: 20),
-              child: DropdownButton <String>(
-                  dropdownColor: Colors.white,
-                  isDense: true,
-                  icon: Icon(Icons.filter_list_sharp, color: Colors.blue, size: 24,),
-                  style: TextStyle(color: Colors.black),
-                  items: this._filterList,
-                  onChanged: (value){
-                    _filterDb(value!);
-                    // _chosenOrderFilter=value;
-                    // Provider.of<CustomerOrderProvider>(context, listen: false).filterOrderStats(value);
-                    // print('selected ${value.status} ${value.statusCode}');
-                    // setState(() {
-                    //   _filterValue=value.status;
-                    // });
-                  }),
-            ),
+          AnimatedContainer(
+            height: 50,
+            // width: _inFilterMode?MediaQuery.of(context).size.width*0.6:50,
+            duration: Duration(milliseconds: 500),
+            child: _inFilterMode?
+            DropdownButtonHideUnderline(
+              child: ButtonTheme(
+                alignedDropdown: true,
+                child: DropdownButton <String>(
+                    key:  _dropdownButtonKey,
+                    dropdownColor: Colors.white,
+                    isDense: true,
+                    icon: Icon(Icons.filter_list_sharp, color: Colors.blue, size: 24,),
+                    style: TextStyle(color: Colors.black),
+                    items: this._filterList,
+                    onChanged: (value){
+                      _filterDb(value!);
+                    }),
+              ),
+            )
+                : MaterialButton(onPressed: () { _setFilterMode(true); },
+                child: Icon(Icons.filter_alt_outlined, color: Colors.blue, size: 25,)),
           ),
+
+
           SizedBox(width: 10,),
         ],
       ),
@@ -162,7 +167,6 @@ class _MyHomePageState extends State<MyHomePage> {
   _setProfiles() async {
     _setSearchMode(false);
     showProgress(true);
-
     try {
       List<Profile> proList = await AzureSingle().getAllProfiles();
       proWidgets = [];
@@ -209,6 +213,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void _setSearchMode(bool bool) {
     setState(() {
       _inSearchMode=bool;
+      _inFilterMode=false;
     });
   }
 
@@ -228,5 +233,31 @@ class _MyHomePageState extends State<MyHomePage> {
       print(' profile fetch error: $e, trace: $t');
     }
     showProgress(false);
+  }
+
+  void openDropdown() {
+    GestureDetector? detector;
+    void searchForGestureDetector(BuildContext? element) {
+      element!.visitChildElements((element) {
+        if (element.widget != null && element.widget is GestureDetector) {
+          detector = element.widget as GestureDetector?;
+          return ;//false;
+        } else {
+          searchForGestureDetector(element);
+        }
+        return;// true;
+      });
+    }
+    searchForGestureDetector(_dropdownButtonKey.currentContext);
+    assert(detector != null);
+    detector!.onTap!();
+  }
+
+  void _setFilterMode(bool bool) {
+    setState(() {
+      _inFilterMode=bool;
+      _inSearchMode=false;
+    });
+    if(_inFilterMode)openDropdown();
   }
 }

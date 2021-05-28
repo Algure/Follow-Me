@@ -303,22 +303,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
     showProgress(true);
     Profile? prf;
 
-    List<String> nameData= ((await uGetSharedPrefValue(kNameKey))??'').split(' ');
-    if(nameData.length==2) {
-      _fname = nameData[0];
-      _sname = nameData[1];
-    }
-    _link= (await uGetSharedPrefValue(kLinkKey))??'';
-    _tittle= (await uGetSharedPrefValue(kBioKey))??'';
-    _age= (await uGetSharedPrefValue(kAgeKey))??'';
-    String picData=(await uGetSharedPrefValue(kPickey))??'';
-    imageIndex= int.tryParse(picData)??0;
 
     try {
+      List<String> nameData= ((await uGetSharedPrefValue(kNameKey))??'').split(' ');
+      if(nameData.length==2) {
+        _fname = nameData[0];
+        _sname = nameData[1];
+      }
+      _link= (await uGetSharedPrefValue(kLinkKey))??'';
+      _tittle= (await uGetSharedPrefValue(kBioKey))??'';
+      _age= (await uGetSharedPrefValue(kAgeKey))??'';
+      String picData=(await uGetSharedPrefValue(kPickey))??'';
+      imageIndex= int.tryParse(picData)??0;
+
       prf = await AzureSingle().fetchProfile(_link);
-    }catch(e,t){
-      print('error: $e,  trace: $t');
-    }
+
     if(prf!=null){
       print('profile: $prf');
       List<String> nameData= (( prf.name)??'').split(' ');
@@ -337,9 +336,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
       await uSetPrefsValue(kAgeKey,'$_age');
       await uSetPrefsValue(kLinkKey,_link);
     }
+
+    }catch(e,t){
+      print('error: $e,  trace: $t');
+    }
     _tittle= _tittle.replaceAll('null', '');
     _age= _age.replaceAll('null', '');
-
     print('age: $_age, _tittle: $_tittle, _link: $_link, _fname:$_fname, _sname: $_sname , image: $imageIndex}');
     showProgress(false);
   }

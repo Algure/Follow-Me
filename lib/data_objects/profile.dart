@@ -1,7 +1,7 @@
 class Profile{
   String? id;
   String? pic;
-  int? age;
+  int age=0;
   String? bio;
   String? name;
   String? link;

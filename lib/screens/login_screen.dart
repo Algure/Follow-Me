@@ -1,12 +1,16 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:follow_me/azure.dart';
 import 'package:follow_me/constants.dart';
 import 'package:follow_me/data_objects/profile.dart';
+import 'package:follow_me/keys.dart';
 import 'package:follow_me/my_button.dart';
 import 'package:follow_me/screens/home_screen.dart';
 import 'package:follow_me/utitlity_functions.dart';
+import 'package:http/http.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:uuid/uuid.dart';
 
@@ -27,9 +31,13 @@ class _LoginScreenState extends State<LoginScreen> {
   String  _password='';
   Widget _socialIcon=SizedBox.shrink();
 
+  TextEditingController? _linkController;
+  TextEditingController? _passController;
+
   @override
   void initState() {
-
+      _linkController= TextEditingController(text: _link);
+      _passController= TextEditingController(text: _password);
   }
 
   @override
@@ -67,9 +75,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   setState(() => _linkInFocus=hasFocus);
                 },
                 child: TextFormField(
-                    controller: TextEditingController(
-                        text: _link,
-                    ),
+                    controller:_linkController,
                     style: TextStyle(color: Colors.black),//kInputTextStyle,
                     textAlign: TextAlign.start,
                     autofocus: false,
@@ -103,9 +109,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   setState(() => _passInFocus=hasFocus);
                 },
                 child: TextFormField(
-                    controller: TextEditingController(
-                        text: _password,
-                    ),
+                    controller: _passController,
                     style: TextStyle(color: Colors.black),//kInputTextStyle,
                     textAlign: TextAlign.start,
                     autofocus: false,
@@ -231,23 +235,27 @@ class _LoginScreenState extends State<LoginScreen> {
         uShowErrorNotification('This link is registered');
         return;
       }
+      print("link: $_link, password: $_password}");
+      String id = await AzureSingle().signUpOnCloud(_link, _password);
       Profile mProfile = Profile()
-        ..id = await getId()
+        ..id = id
         ..age = 0
         ..name = ''
         ..link = _link
         ..bio = ''
         ..pic = '';
+
       await AzureSingle().uploadProfile(mProfile);
-      await AzureSingle().savePassword(mProfile.id!, _password);
+      // await AzureSingle().savePassword(mProfile.id!, _password);
       await uSetPrefsValue(kIdkey, mProfile.id);
       await uSetPrefsValue(kLinkKey, _link);
+      await uSetPrefsValue(kPassKey, _password);
       showProgress(false);
-      Navigator.pushReplacement(context,
-          MaterialPageRoute(builder: (context) => MyHomePage(title: 'Home',)));
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyHomePage(title: 'Home',)));
     }catch(e,t){
       print('error: $e, trace: $t');
-      uShowErrorNotification('An error occured');
+      if(e.runtimeType==AuthException) uShowErrorNotification('${(e as AuthException).message}');
+      else uShowErrorNotification('An error occured !');
     }
     showProgress(false);
   }
@@ -283,7 +291,7 @@ class _LoginScreenState extends State<LoginScreen> {
       }
 
       _password = _password.trim();
-      if (_password == null || _password.isEmpty) {
+      if (_password == null || _password.isEmpty|| _password.isEmpty) {
         showProgress(false);
         uShowErrorNotification('Password cannot be empty');
         return;
@@ -307,29 +315,31 @@ class _LoginScreenState extends State<LoginScreen> {
       //   print('error: $e,  trace: $t');
       // }
       if (prf != null) {
-        List<String> nameData = ((prf.name) ?? '').split(' ');
-        if (nameData.length == 2) {
-          fname = nameData[0];
-          sname = nameData[1];
-          await uSetPrefsValue(kNameKey, '$fname $sname');
-        }
-        id = prf.id!;
-        tittle = prf.bio!;
-        age = prf.age != null ? '${prf.age}' : '0';
-        pic = prf.pic;
-
-        if(id==null || id.isEmpty || id=='null') throw 'Profile not found.';
-        print(
-            'age: $age, _tittle: $tittle, _link: $_link, _fname:$fname, _sname: $sname, pic: $pic');
-        String savedPass = await AzureSingle().getPassword(id);
-        print('saved: $savedPass, password:$_password');
-        if (savedPass != _password) throw "Wrong password";
-
-        await uSetPrefsValue(kBioKey, tittle);
-        await uSetPrefsValue(kAgeKey, '$age');
+        // List<String> nameData = ((prf.name) ?? '').split(' ');
+        // if (nameData.length == 2) {
+        //   fname = nameData[0];
+        //   sname = nameData[1];
+        //   await uSetPrefsValue(kNameKey, '$fname $sname');
+        // }
+        // id = prf.id!;
+        // tittle = prf.bio!;
+        // age = prf.age != null ? '${prf.age}' : '0';
+        // pic = prf.pic;
+        //
+        // if(id==null || id.isEmpty || id=='null') throw 'Profile not found.';
+        // print(
+        //     'age: $age, _tittle: $tittle, _link: $_link, _fname:$fname, _sname: $sname, pic: $pic');
+        // String savedPass = await AzureSingle().getPassword(id);
+        // print('saved: $savedPass, password:$_password');
+        // if (savedPass != _password) throw "Wrong password";
+        //
+        // await uSetPrefsValue(kBioKey, tittle);
+        // await uSetPrefsValue(kAgeKey, '$age');
+        // await uSetPrefsValue(kPickey, '${prf.pic}');
+        id =await AzureSingle().loginOnCloud(_link, _password);
         await uSetPrefsValue(kIdkey, '$id');
-        await uSetPrefsValue(kPickey, '${prf.pic}');
         await uSetPrefsValue(kLinkKey, _link);
+        await uSetPrefsValue(kPassKey, _password);
         showProgress(false);
         Navigator.pushReplacement(context,
             MaterialPageRoute(builder: (context) => MyHomePage(title: 'Home',)));
@@ -338,7 +348,8 @@ class _LoginScreenState extends State<LoginScreen> {
       }
     }catch(e,t){
       print('Error: $e, trace: $t');
-      if(e.toString().contains('Wrong password'))uShowErrorNotification('Wrong password !');
+      if(e.runtimeType==AuthException) uShowErrorNotification('${(e as AuthException).message}');
+      else if(e.toString().contains('Wrong password'))uShowErrorNotification('Wrong password !');
       else if(e.toString().contains('Profile not found.'))uShowErrorNotification('Profile not found.');
       else uShowErrorNotification('An error occured');
     }

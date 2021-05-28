@@ -47,9 +47,9 @@ class _State extends State<DescriptionScreen> {
                 Container(
                   margin: EdgeInsets.only(top: 50),
                   child: Hero(
-                    tag: widget.profile.id!??'',
+                    tag: widget.profile.id.toString()??'',
                     child: ClipOval(
-                        child: Image.asset(kAvatarList[int.tryParse(widget.profile.pic!)??0], height: MediaQuery.of(context).size.height*0.2,)
+                        child: Image.asset(kAvatarList[int.tryParse(widget.profile.pic.toString())??0], height: MediaQuery.of(context).size.height*0.2,)
                     ),
                   ),
                 ),
@@ -63,7 +63,7 @@ class _State extends State<DescriptionScreen> {
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.all(12.0),
-                  child: Text(widget.profile.bio??'', textAlign: TextAlign.center, style: TextStyle(color: Colors.black54, fontWeight: FontWeight.w900,           fontSize: 15),),
+                  child: Text(widget.profile.bio??'', textAlign: TextAlign.center, style: TextStyle(color: Colors.black54, fontWeight: FontWeight.w900,    fontSize: 15),),
                 ),
                 SizedBox(height: 50,),
                 MaterialButton(

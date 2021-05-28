@@ -31,13 +31,13 @@ class ProfileLitem extends StatelessWidget {
             },
             child: ListTile(
               leading: Hero(
-                tag: profile.id!,
+                tag: profile.id!??'naSDa',
                 child: Container(
                   height: 50,
                   width: 50,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    image: DecorationImage(image:AssetImage(kAvatarList[int.tryParse(profile.pic!)??0]), fit: BoxFit.fill)
+                    image: DecorationImage(image:AssetImage(kAvatarList[int.tryParse(profile.pic.toString())??0]), fit: BoxFit.fill)
                   ),
                 ),
               ),
@@ -74,7 +74,7 @@ class ProfileLitem extends StatelessWidget {
   }
 
   String _getImageIcon() {
-    String temp=profile.link.toString().toLowerCase();
+    String temp=profile.link!.toString().toLowerCase();
     if(temp.contains('github')){
       return 'images/github.png';
     }else if(temp.contains('facebook')){
