@@ -154,25 +154,6 @@ class AzureSingle {
     return prolist;
   }
 
-  savePassword(String id, String password) async {
-    AzureStorage astore= AzureStorage.parse(connectionString);
-    var result= await astore.getBlob('password/$id');
-    if(result.statusCode>=400){
-      await astore.putBlob('password/$id', contentType: 'application/json', body: password);
-      return;
-    }
-    throw 'Id already exists.';
-  }
-
-  Future<String> getPassword(String id) async {
-    AzureStorage astore= AzureStorage.parse(connectionString);
-    var result= await astore.getBlob('password/$id');
-    // print('id: $id');
-    String message= await result.stream.bytesToString();
-    print('fetch: $message');
-    if(result.statusCode>=400) throw 'An error occured';
-    return message;
-  }
 }
 
 class AuthException implements Exception {

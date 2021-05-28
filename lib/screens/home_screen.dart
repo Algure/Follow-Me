@@ -167,25 +167,30 @@ class _MyHomePageState extends State<MyHomePage> {
   displayAboutDialog(){
     Navigator.pop(context);
     showAboutDialog(
-        // applicationName: 'Gmart.ng',
+        applicationName: '',
         context: this.context,
         // applicationVersion: '2.0.0',
         // applicationLegalese: 'Developed by Algure',
-        applicationIcon:Container(child: Image.asset('images/logo.png',height: 70, width: 100,),),
+        applicationIcon:Container(child: Image.asset('images/logo.png',height: 100, width: 100,),),
         children: [
           SizedBox(height: 20,),
-          Text('Developed by Algure', style: TextStyle(fontSize: 14,color: Colors.black),),
-          Text('Powered by Azure', style: TextStyle(fontSize: 10,color: Colors.grey),),
+          Text('Powered by Azure', style: TextStyle(fontSize: 10,color: Colors.blue.shade900),),
+          SizedBox(height: 20,),
+          Text('Developed by Algure', style: TextStyle(fontSize: 10,color: Colors.grey),),
           Container(
             alignment: Alignment.center,
             color: Colors.transparent,
             child: RawMaterialButton(onPressed: () async {
-              showProgress(true);
-              await launch('https://github.com/Algure/Follow-Me');
+              try {
+                showProgress(true);
+                await launch('https://github.com/Algure/Follow-Me');
+              }catch(e, trace){
+                print('error: $e, trace $trace');
+              }
               showProgress(false);
             },
                 splashColor: Colors.white
-                , child: Text('Hosted on github.', style: TextStyle(fontSize: 14, color: Colors.blue),)),
+                , child: Text('Hosted on github.', style: TextStyle(fontSize: 9, color: Colors.blue),)),
           )
         ]
     );

@@ -38,6 +38,7 @@ class _LoginScreenState extends State<LoginScreen> {
   void initState() {
       _linkController= TextEditingController(text: _link);
       _passController= TextEditingController(text: _password);
+      EasyLoading.instance.userInteractions=false;
   }
 
   @override
@@ -205,6 +206,9 @@ class _LoginScreenState extends State<LoginScreen> {
     showProgress(true);
     try {
       _link = _link.trim();
+      while(_link.endsWith('/')){
+        _link=_link.substring(0, _link.length-1);
+      }
       if (_link == null || _link.isEmpty) {
         showProgress(false);
         uShowErrorNotification('Social link cannot be empty');
@@ -275,6 +279,9 @@ class _LoginScreenState extends State<LoginScreen> {
     showProgress(true);
     try {
       _link = _link.trim().toLowerCase();
+      while(_link.endsWith('/')){
+        _link=_link.substring(0, _link.length-1);
+      }
       if (_link == null || _link.isEmpty) {
         showProgress(false);
         uShowErrorNotification('Social link cannot be empty');
