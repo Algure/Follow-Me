@@ -8,6 +8,7 @@ import 'package:follow_me/data_objects/profile.dart';
 import 'package:follow_me/screens/profile_screen.dart';
 import 'package:follow_me/utitlity_functions.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MyHomePage extends StatefulWidget {
 
@@ -28,10 +29,12 @@ class _MyHomePageState extends State<MyHomePage> {
   GlobalKey _dropdownButtonKey = GlobalKey(debugLabel: 'GlobalDropdownKey');
 
   String searchText='';
+  String? _filterValue='';
 
   bool _inSearchMode=false;
 
   List<DropdownMenuItem<String>> _filterList=[
+    DropdownMenuItem<String>(child: Text( ''), value: '') ,
     DropdownMenuItem<String>(child: Text( 'Age-range: 1-10'), value: '1-10') ,
     DropdownMenuItem<String>(child: Text('Age-range: 11-20',), value:'11-20') ,
     DropdownMenuItem<String>(child: Text('Age-range: 21-30'), value:'21-30') ,
@@ -116,12 +119,13 @@ class _MyHomePageState extends State<MyHomePage> {
                 alignedDropdown: true,
                 child: DropdownButton <String>(
                     key:  _dropdownButtonKey,
-                    dropdownColor: Colors.white,
                     isDense: true,
                     icon: Icon(Icons.filter_list_sharp, color: Colors.blue, size: 24,),
                     style: TextStyle(color: Colors.black),
                     items: this._filterList,
+                    value: _filterValue,
                     onChanged: (value){
+                      _filterValue=value;
                       _filterDb(value!);
                     }),
               ),
@@ -129,8 +133,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 : MaterialButton(onPressed: () { _setFilterMode(true); },
                 child: Icon(Icons.filter_alt_outlined, color: Colors.blue, size: 25,)),
           ),
-
-
+          GestureDetector(
+              onTap: displayAboutDialog,
+              child: Icon(Icons.info_outline, color: Colors.blue, size: 25,)),
           SizedBox(width: 10,),
         ],
       ),
@@ -159,6 +164,32 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
   }
+  displayAboutDialog(){
+    Navigator.pop(context);
+    showAboutDialog(
+        // applicationName: 'Gmart.ng',
+        context: this.context,
+        // applicationVersion: '2.0.0',
+        // applicationLegalese: 'Developed by Algure',
+        applicationIcon:Container(child: Image.asset('images/logo.png',height: 70, width: 100,),),
+        children: [
+          SizedBox(height: 20,),
+          Text('Developed by Algure', style: TextStyle(fontSize: 14,color: Colors.black),),
+          Text('Powered by Azure', style: TextStyle(fontSize: 10,color: Colors.grey),),
+          Container(
+            alignment: Alignment.center,
+            color: Colors.transparent,
+            child: RawMaterialButton(onPressed: () async {
+              showProgress(true);
+              await launch('https://github.com/Algure/Follow-Me');
+              showProgress(false);
+            },
+                splashColor: Colors.white
+                , child: Text('Hosted on github.', style: TextStyle(fontSize: 14, color: Colors.blue),)),
+          )
+        ]
+    );
+  }
 
   void _goToProfilePage() {
     Navigator.push(context, MaterialPageRoute(builder: (context)=>ProfileScreen()));
@@ -166,6 +197,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   _setProfiles() async {
     _setSearchMode(false);
+    _setFilterMode(false);
     showProgress(true);
     try {
       List<Profile> proList = await AzureSingle().getAllProfiles();
@@ -258,6 +290,6 @@ class _MyHomePageState extends State<MyHomePage> {
       _inFilterMode=bool;
       _inSearchMode=false;
     });
-    if(_inFilterMode)openDropdown();
+    // if(_inFilterMode)openDropdown();
   }
 }
