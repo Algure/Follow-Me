@@ -55,6 +55,10 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        leading: GestureDetector(
+          onTap: _goToProfilePage,
+          child: Icon(Icons.person_outline_outlined,color: Colors.blue, size: 24,),
+        ),
         backgroundColor: Colors.white,
         title: Hero(
             tag: 'fologo',
@@ -136,7 +140,18 @@ class _MyHomePageState extends State<MyHomePage> {
               controller: _rController,
               onRefresh: _setProfiles,
               child: SingleChildScrollView(
-                child: Column(
+                child: MediaQuery.of(context).size.width>=800? GridView(
+                  padding: EdgeInsets.all(10),
+                  children:proWidgets,
+                  semanticChildCount: 2,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      mainAxisSpacing: 10,
+                      crossAxisSpacing: 10,
+                      childAspectRatio: 0.78
+                      )
+                ):
+                Column(
                   mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: proWidgets
@@ -146,12 +161,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _goToProfilePage,
-        tooltip: 'Increment',
-        backgroundColor: Colors.blue,
-        child: Icon(Icons.person_outline_outlined,color: Colors.white,),
-      ),
+
     );
   }
 
@@ -259,7 +269,7 @@ class _MyHomePageState extends State<MyHomePage> {
     _showProgress(false);
   }
 
-  void _openDropdown() {
+  void openDropdown() {
     GestureDetector? detector;
     void searchForGestureDetector(BuildContext? element) {
       element!.visitChildElements((element) {

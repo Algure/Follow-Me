@@ -59,121 +59,129 @@ class _LoginScreenState extends State<LoginScreen> {
           mainAxisSize: MainAxisSize.max,
           children: [
             SingleChildScrollView(
-              child: Column(
-                children: [
-                  Hero(
-                    tag: 'fologo',
-                    child: AnimatedContainer(
-                      width: selected ? 200.0 : 0.0,
-                      height: selected ? 200.0 : 0.0,
-                      // color: Colors.red : Colors.blue,
-                      alignment:Alignment.center,
-                      duration: Duration(milliseconds: 2000) ,
-                      curve: Curves.fastLinearToSlowEaseIn,
-                      child: Image.asset('images/logo.png', color: Colors.blue, height: 75, width: 300,),
-                    ),
+              child: Card(
+                elevation: 8,
+                child: Container(
+                  constraints: BoxConstraints(
+                    maxWidth: 500
                   ),
-                  SizedBox(height: 20,),
-                  Container(
-                    height: 50,
-                    child: Focus(
-                      onFocusChange: (hasFocus) {
-                        setState(() => _linkInFocus=hasFocus);
-                      },
-                      child: TextFormField(
-                          controller:_linkController,
-                          style: TextStyle(color: Colors.black),//kInputTextStyle,
-                          textAlign: TextAlign.start,
-                          autofocus: false,
-                          onEditingComplete: (){
-                            // setState(() {
-                            //   _descFocus.unfocus();
-                            // });
-                          },
-                          onChanged: (text){
-                            _link=text;
-                            _setSocialIcon();
-                          },
-                          textInputAction: TextInputAction.next,
-                          decoration: InputDecoration(
-                              filled: true,
-                              fillColor: Colors.white,
-                              labelText: 'Please enter your social link (Twitter link)',
-                              labelStyle: TextStyle(
-                                  color:_linkInFocus?hintSelectedColor:hintColor
-                              ),
-                              suffixIcon: Padding(padding: EdgeInsets.all(5),child: _socialIcon),
-                              focusedBorder: kLinedFocusedBorder,
-                              enabledBorder: kLinedBorder,
-                              disabledBorder: kLinedBorder
-                          )
+                  color: Colors.white,
+                  child: Column(
+                    children: [
+                      Hero(
+                        tag: 'fologo',
+                        child: AnimatedContainer(
+                          width: selected ? 200.0 : 0.0,
+                          height: selected ? 200.0 : 0.0,
+                          // color: Colors.red : Colors.blue,
+                          alignment:Alignment.center,
+                          duration: Duration(milliseconds: 2000) ,
+                          curve: Curves.fastLinearToSlowEaseIn,
+                          child: Image.asset('images/logo.png', color: Colors.blue, height: 75, width: 300,),
+                        ),
                       ),
-                    ),
-                  ),
-                  SizedBox(height: 20,),
-                  Container(
-                    height: 50,
-                    child: Focus(
-                      onFocusChange: (hasFocus) {
-                        setState(() => _passInFocus=hasFocus);
-                      },
-                      child: TextFormField(
-                          controller: _passController,
-                          style: TextStyle(color: Colors.black),//kInputTextStyle,
-                          textAlign: TextAlign.start,
-                          autofocus: false,
-                          onEditingComplete: (){
-                            // setState(() {
-                            //   _descFocus.unfocus();
-                            // });
+                      SizedBox(height: 20,),
+                      Container(
+                        height: 50,
+                        child: Focus(
+                          onFocusChange: (hasFocus) {
+                            setState(() => _linkInFocus=hasFocus);
                           },
-                          onChanged: (text){
-                            _password=text;
-                            // _setSocialIcon();
-                          },
-                          obscureText: showPassword?false:true,
-                          textInputAction: TextInputAction.done,
-                          decoration: InputDecoration(
-                              filled: true,
-                              fillColor: Colors.white,
-                              labelText: 'Please enter your password',
-                              labelStyle: TextStyle(
-                                  color:_passInFocus?hintSelectedColor:hintColor
-                              ),
-                              // suffixIcon: Padding(padding: EdgeInsets.all(5),child: Icon(Icons.lock)),
-                              suffixIcon: IconButton(icon: Icon(showPassword?Icons.visibility_off:Icons.visibility, color: Colors.grey,), onPressed: _toggleIconVisibility,),
-                              focusedBorder: kLinedFocusedBorder,
-                              enabledBorder: kLinedBorder,
-                              disabledBorder: kLinedBorder
-                          )
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 20,),
-                  SizedBox(
-                    height: 50,
-                    child: Row(
-                        children:[
-
-                          Expanded(
-                            child: MyButton(buttonColor: Colors.blue,
-                              onPressed:() async {
-                                _login();
+                          child: TextFormField(
+                              controller:_linkController,
+                              style: TextStyle(color: Colors.black),//kInputTextStyle,
+                              textAlign: TextAlign.start,
+                              autofocus: false,
+                              onEditingComplete: (){
+                                // setState(() {
+                                //   _descFocus.unfocus();
+                                // });
                               },
-                              textColor: Colors.white, text: 'Login', ),
+                              onChanged: (text){
+                                _link=text;
+                                _setSocialIcon();
+                              },
+                              textInputAction: TextInputAction.next,
+                              decoration: InputDecoration(
+                                  filled: true,
+                                  fillColor: Colors.white,
+                                  labelText: 'Please enter your social link (Twitter link)',
+                                  labelStyle: TextStyle(
+                                      color:_linkInFocus?hintSelectedColor:hintColor
+                                  ),
+                                  suffixIcon: Padding(padding: EdgeInsets.all(5),child: _socialIcon),
+                                  focusedBorder: kLinedFocusedBorder,
+                                  enabledBorder: kLinedBorder,
+                                  disabledBorder: kLinedBorder
+                              )
                           ),
-                          SizedBox(width: 15,),
-                          Expanded(
-                            child: MyButton(buttonColor: Colors.black,
-                              textColor: Colors.white,
-                              onPressed:() async {
-                                _signup();
-                              }, text: 'Sign Up', ),
+                        ),
+                      ),
+                      SizedBox(height: 20,),
+                      Container(
+                        height: 50,
+                        child: Focus(
+                          onFocusChange: (hasFocus) {
+                            setState(() => _passInFocus=hasFocus);
+                          },
+                          child: TextFormField(
+                              controller: _passController,
+                              style: TextStyle(color: Colors.black),//kInputTextStyle,
+                              textAlign: TextAlign.start,
+                              autofocus: false,
+                              onEditingComplete: (){
+                                // setState(() {
+                                //   _descFocus.unfocus();
+                                // });
+                              },
+                              onChanged: (text){
+                                _password=text;
+                                // _setSocialIcon();
+                              },
+                              obscureText: showPassword?false:true,
+                              textInputAction: TextInputAction.done,
+                              decoration: InputDecoration(
+                                  filled: true,
+                                  fillColor: Colors.white,
+                                  labelText: 'Please enter your password',
+                                  labelStyle: TextStyle(
+                                      color:_passInFocus?hintSelectedColor:hintColor
+                                  ),
+                                  // suffixIcon: Padding(padding: EdgeInsets.all(5),child: Icon(Icons.lock)),
+                                  suffixIcon: IconButton(icon: Icon(showPassword?Icons.visibility_off:Icons.visibility, color: Colors.grey,), onPressed: _toggleIconVisibility,),
+                                  focusedBorder: kLinedFocusedBorder,
+                                  enabledBorder: kLinedBorder,
+                                  disabledBorder: kLinedBorder
+                              )
                           ),
-                        ]
-                    ),
+                        ),
+                      ),
+                      SizedBox(height: 20,),
+                      SizedBox(
+                        height: 50,
+                        child: Row(
+                            children:[
+                              Expanded(
+                                child: MyButton(buttonColor: Colors.blue,
+                                  onPressed:() async {
+                                    _login();
+                                  },
+                                  textColor: Colors.white, text: 'Login', ),
+                              ),
+                              SizedBox(width: 15,),
+                              Expanded(
+                                child: MyButton(buttonColor: Colors.black,
+                                  textColor: Colors.white,
+                                  onPressed:() async {
+                                    _signup();
+                                  }, text: 'Sign Up', ),
+                              ),
+                            ]
+                        ),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
            Spacer(),
