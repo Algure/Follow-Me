@@ -67,7 +67,7 @@ class _MyHomePageState extends State<MyHomePage> {
         actions: [
           AnimatedContainer(
             height: 50,
-            width: _inSearchMode?MediaQuery.of(context).size.width*0.6:50,
+            width: _inSearchMode?MediaQuery.of(context).size.width*0.4:50,
             duration: Duration(milliseconds: 500),
             child: _inSearchMode?
                 TextFormField(

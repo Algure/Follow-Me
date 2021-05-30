@@ -96,6 +96,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 style: TextStyle(color: Colors.black),//kInputTextStyle,
                                 textAlign: TextAlign.start,
                                 autofocus: false,
+                                maxLines: 1,
                                 onEditingComplete: (){
                                   // setState(() {
                                   //   _descFocus.unfocus();
@@ -133,6 +134,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 style: TextStyle(color: Colors.black),//kInputTextStyle,
                                 textAlign: TextAlign.start,
                                 autofocus: false,
+                                maxLines: 1,
                                 onEditingComplete: (){
                                   // setState(() {
                                   //   _descFocus.unfocus();

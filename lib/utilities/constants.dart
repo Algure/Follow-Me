@@ -36,8 +36,8 @@ const kNavTextStyle=TextStyle(
 
 const kBaseUrl= 'https://follow-me.search.windows.net/indexes/folloe-me';
 const kAvatarList=[
-  'images/maasai.png',
   'images/boy.png',
+  'images/maasai.png',
   'images/gamer.png',
   'images/boy1.png',
   'images/man1.png',
