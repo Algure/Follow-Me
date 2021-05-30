@@ -48,7 +48,7 @@ class _State extends State<DescriptionScreen> {
                 Container(
                   margin: EdgeInsets.only(top: 50),
                   child: Hero(
-                    tag: widget.profile.id.toString()??'',
+                    tag: widget.profile.id.toString(),
                     child: ClipOval(
                         child: Image.asset(kAvatarList[int.tryParse(widget.profile.pic.toString())??0], height: MediaQuery.of(context).size.height*0.2,)
                     ),
@@ -102,7 +102,7 @@ class _State extends State<DescriptionScreen> {
   void _setSocialIcon() {
     String? iconString= _getImageIcon(widget.profile.link??'');
     if(iconString==null){
-      _socialIcon=Image.asset('images/twitter.png'??'', height: 20, width: 20,);
+      _socialIcon=Image.asset('images/twitter.png', height: 20, width: 20,);
       return;
     }
     if(_iconString!=iconString){

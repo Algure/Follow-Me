@@ -28,7 +28,7 @@ class ProfileLitem extends StatelessWidget {
             },
             child: ListTile(
               leading: Hero(
-                tag: profile.id!,
+                tag: profile.id!??'',
                 child: Container(
                   height: 50,
                   width: 50,

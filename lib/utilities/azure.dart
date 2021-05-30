@@ -33,6 +33,7 @@ class AzureSingle {
     String message='';
     String sendUrl = '$functionsEndPoint/api/Login?link=$link&pass=$password';
     Request req = Request('POST', Uri.parse(sendUrl));
+    print(sendUrl);
     await req.send().then((value) async {
       message= await value.stream.bytesToString();
       print('login result:  ${value.statusCode},  ${message},  ${value.toString()},  ${value.reasonPhrase.toString()}');

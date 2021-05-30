@@ -107,9 +107,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           text: _fname
                                       ),
                                       onEditingComplete: (){
-                                        // setState(() {
-                                        //   _fnameFocus.unfocus();
-                                        // });
                                       },
                                       inputFormatters:[
                                         LengthLimitingTextInputFormatter(nameLength)

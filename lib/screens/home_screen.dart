@@ -139,8 +139,8 @@ class _MyHomePageState extends State<MyHomePage> {
             child: SmartRefresher(
               controller: _rController,
               onRefresh: _setProfiles,
-              child: SingleChildScrollView(
-                child: MediaQuery.of(context).size.width>=800? GridView(
+              child: MediaQuery.of(context).size.width>=800?
+              GridView(
                   padding: EdgeInsets.all(10),
                   children:proWidgets,
                   semanticChildCount: 2,
@@ -148,10 +148,11 @@ class _MyHomePageState extends State<MyHomePage> {
                       crossAxisCount: 2,
                       mainAxisSpacing: 10,
                       crossAxisSpacing: 10,
-                      childAspectRatio: 0.78
-                      )
-                ):
-                Column(
+                      childAspectRatio: 0.2
+                  )
+              ):
+              SingleChildScrollView(
+                child: Column(
                   mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: proWidgets
