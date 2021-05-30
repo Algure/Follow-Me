@@ -8,7 +8,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:follow_me/data_objects/profile.dart';
-import 'package:follow_me/keys.dart';
+import '../lib/utilities/keys.dart';
 
 import 'package:follow_me/main.dart';
 import 'package:http/http.dart';

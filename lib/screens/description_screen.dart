@@ -3,16 +3,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_progress_hud/flutter_progress_hud.dart';
-import 'package:follow_me/constants.dart';
+import '../utilities/constants.dart';
 import 'package:follow_me/data_objects/profile.dart';
-import 'package:follow_me/utitlity_functions.dart';
+import '../utilities/utitlity_functions.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DescriptionScreen  extends StatefulWidget {
 
   DescriptionScreen(this.profile);
 
-  Profile profile= Profile();
+  Profile profile;
+
   @override
   _State createState() => _State();
 }
@@ -68,7 +69,7 @@ class _State extends State<DescriptionScreen> {
                 SizedBox(height: 50,),
                 MaterialButton(
                   padding: const EdgeInsets.all(12.0),
-                  onPressed: () { openLink(); },
+                  onPressed: () { _openLink(); },
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children:
@@ -90,7 +91,7 @@ class _State extends State<DescriptionScreen> {
     );
   }
 
-  void showProgress(bool bool) {
+  void _showProgress(bool bool) {
     if(bool)EasyLoading.show(status: 'loading...');
     else EasyLoading.dismiss();
     setState(() {
@@ -129,13 +130,13 @@ class _State extends State<DescriptionScreen> {
     return null;
   }
 
-  void openLink() async{
-    showProgress(true);
+  void _openLink() async{
+    _showProgress(true);
     if(await canLaunch(widget.profile.link!) ){
       await launch(widget.profile.link!);
     }else{
       uShowErrorNotification('Invalid link');
     }
-    showProgress(false);
+    _showProgress(false);
   }
 }

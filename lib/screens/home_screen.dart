@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_progress_hud/flutter_progress_hud.dart';
-import 'package:follow_me/azure.dart';
-import 'package:follow_me/constants.dart';
+import '../utilities/azure.dart';
 import 'package:follow_me/custom_widgets/profile_list.dart';
 import 'package:follow_me/data_objects/profile.dart';
 import 'package:follow_me/screens/profile_screen.dart';
-import 'package:follow_me/utitlity_functions.dart';
+import '../utilities/utitlity_functions.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -21,32 +20,30 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  List<Widget> proWidgets= [];
-  Color hintColor=Colors.grey;
-  var _progress;
-
-  RefreshController _rController= RefreshController(initialRefresh: false);
   GlobalKey _dropdownButtonKey = GlobalKey(debugLabel: 'GlobalDropdownKey');
+  Color hintColor=Colors.grey;
+
+  bool _inSearchMode=false;
+  bool _inFilterMode=false;
 
   String searchText='';
   String? _filterValue='';
 
-  bool _inSearchMode=false;
-
+  List<Widget> proWidgets= [];
   List<DropdownMenuItem<String>> _filterList=[
-    DropdownMenuItem<String>(child: Text( ''), value: '') ,
-    DropdownMenuItem<String>(child: Text( 'Age-range: 1-10'), value: '1-10') ,
-    DropdownMenuItem<String>(child: Text('Age-range: 11-20',), value:'11-20') ,
-    DropdownMenuItem<String>(child: Text('Age-range: 21-30'), value:'21-30') ,
-    DropdownMenuItem<String>(child: Text('Age-range: 31-40'), value:'31-40') ,
-    DropdownMenuItem<String>(child: Text('Age-range: 41-50'), value:'41-50') ,
-    DropdownMenuItem<String>(child: Text('Age-range: 51-60'), value:'51-60') ,
-    DropdownMenuItem<String>(child: Text('Age-range: 61-70'), value:'61-70') ,
-    DropdownMenuItem<String>(child: Text('Age-range: 71-80'), value:'71-80') ,
-    DropdownMenuItem<String>(child: Text('Age-range: 90-100'), value:'90-100') ,
+      DropdownMenuItem<String>(child: Text( ''), value: '') ,
+      DropdownMenuItem<String>(child: Text( 'Age-range: 1-10'), value: '1-10') ,
+      DropdownMenuItem<String>(child: Text('Age-range: 11-20',), value:'11-20') ,
+      DropdownMenuItem<String>(child: Text('Age-range: 21-30'), value:'21-30') ,
+      DropdownMenuItem<String>(child: Text('Age-range: 31-40'), value:'31-40') ,
+      DropdownMenuItem<String>(child: Text('Age-range: 41-50'), value:'41-50') ,
+      DropdownMenuItem<String>(child: Text('Age-range: 51-60'), value:'51-60') ,
+      DropdownMenuItem<String>(child: Text('Age-range: 61-70'), value:'61-70') ,
+      DropdownMenuItem<String>(child: Text('Age-range: 71-80'), value:'71-80') ,
+      DropdownMenuItem<String>(child: Text('Age-range: 90-100'), value:'90-100') ,
     ];
 
-  bool _inFilterMode=false;
+  RefreshController _rController= RefreshController(initialRefresh: false);
 
   @override
   void initState() {
@@ -61,7 +58,7 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Colors.white,
         title: Hero(
             tag: 'fologo',
-            child: Image.asset('images/logo.png', color: Colors.blue, height: 50, width: 150,)),// Text('Follow Me', style: TextStyle(color: Colors.blue),),
+            child: Image.asset('images/logo.png', color: Colors.blue, height: 50, width: 150,)),
         elevation: 0,
         actions: [
           AnimatedContainer(
@@ -76,14 +73,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 style: TextStyle(color: Colors.black),//kInputTextStyle,
                 textAlign: TextAlign.start,
                 autofocus: false,
-                onEditingComplete: (){
-                  // setState(() {
-                  //   _descFocus.unfocus();
-                  // });
-                },
                 onChanged: (text){
                   searchText=text;
-                  // _setSocialIcon();
                 },
                 textInputAction: TextInputAction.go,
                 onFieldSubmitted: _startSearch,
@@ -111,7 +102,6 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           AnimatedContainer(
             height: 50,
-            // width: _inFilterMode?MediaQuery.of(context).size.width*0.6:50,
             duration: Duration(milliseconds: 500),
             child: _inFilterMode?
             DropdownButtonHideUnderline(
@@ -164,34 +154,31 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
   }
+
   displayAboutDialog(){
-    Navigator.pop(context);
     showAboutDialog(
         applicationName: '',
         context: this.context,
-        // applicationVersion: '2.0.0',
-        // applicationLegalese: 'Developed by Algure',
         applicationIcon:Container(child: Image.asset('images/logo.png',height: 100, width: 100,),),
         children: [
            SizedBox(height: 20,),
-          Text('Developed by Algure', style: TextStyle(fontSize: 10,color: Colors.grey),),
+          Row(children:[
+            Text('Developed by', style: TextStyle(fontSize: 10,color: Colors.grey),),
+            GestureDetector(
+                onTap: () async {
+                  await launch('https://www.linkedin.com/in/ajiri-gunn-a85352169/');
+                },
+                child: Text(' Algure', style: TextStyle(fontSize: 10,color: Colors.blue),)),
+          ]),
+
+          Row(children:[
+            Text('Avatars from ', style: TextStyle(fontSize: 10,color: Colors.grey),),
+            GestureDetector(
+                onTap: () async {await launch('https://www.freepik.com');},
+                child: Text(' https://www.freepik.com', style: TextStyle(fontSize: 10,color: Colors.blue),)),
+          ]),
           SizedBox(height: 20,),
-          Text('Powered by Azure', style: TextStyle(fontSize: 8,color: Colors.blue.shade900),),
-          Container(
-            alignment: Alignment.center,
-            color: Colors.transparent,
-            child: RawMaterialButton(onPressed: () async {
-              try {
-                showProgress(true);
-                await launch('https://github.com/Algure/Follow-Me');
-              }catch(e, trace){
-                print('error: $e, trace $trace');
-              }
-              showProgress(false);
-            },
-                splashColor: Colors.white
-                , child: Text('Hosted on github.', style: TextStyle(fontSize: 9, color: Colors.blue),)),
-          )
+          Text('Powered by Azure', style: TextStyle(fontSize: 8,color: Colors.blue.shade900.withOpacity(0.5)),),
         ]
     );
   }
@@ -203,7 +190,7 @@ class _MyHomePageState extends State<MyHomePage> {
   _setProfiles() async {
     _setSearchMode(false);
     _setFilterMode(false);
-    showProgress(true);
+    _showProgress(true);
     try {
       List<Profile> proList = await AzureSingle().getAllProfiles();
       proWidgets = [];
@@ -215,10 +202,10 @@ class _MyHomePageState extends State<MyHomePage> {
       uShowErrorNotification('An error occured. Drag to refresh.');
       print(' profile fetch error: $e, trace: $t');
     }
-    showProgress(false);
+    _showProgress(false);
   }
 
-  void showProgress(bool bool) {
+  void _showProgress(bool bool) {
     _rController.refreshCompleted();
     if(bool)EasyLoading.show(status: 'loading...');
     else EasyLoading.dismiss();
@@ -232,7 +219,7 @@ class _MyHomePageState extends State<MyHomePage> {
       await  _setProfiles();
       return;
     }
-    showProgress(true);
+    _showProgress(true);
     try {
       List<Profile> proList = await AzureSingle().searchProfiles(value);
       proWidgets = [];
@@ -244,7 +231,7 @@ class _MyHomePageState extends State<MyHomePage> {
       uShowErrorNotification('An error occured. Drag to refresh.');
       print(' profile fetch error: $e, trace: $t');
     }
-    showProgress(false);
+    _showProgress(false);
   }
 
   void _setSearchMode(bool bool) {
@@ -257,7 +244,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> _filterDb(String value) async {
     List<String> range= value.split('-');
     if(range.length!=2)return;
-    showProgress(true);
+    _showProgress(true);
     try {
       List<Profile> proList = await AzureSingle().filterProfiles(value);
       proWidgets = [];
@@ -269,20 +256,20 @@ class _MyHomePageState extends State<MyHomePage> {
       uShowErrorNotification('An error occured. Drag to refresh.');
       print(' profile fetch error: $e, trace: $t');
     }
-    showProgress(false);
+    _showProgress(false);
   }
 
-  void openDropdown() {
+  void _openDropdown() {
     GestureDetector? detector;
     void searchForGestureDetector(BuildContext? element) {
       element!.visitChildElements((element) {
         if (element.widget != null && element.widget is GestureDetector) {
           detector = element.widget as GestureDetector?;
-          return ;//false;
+          return ;
         } else {
           searchForGestureDetector(element);
         }
-        return;// true;
+        return;
       });
     }
     searchForGestureDetector(_dropdownButtonKey.currentContext);
@@ -295,6 +282,5 @@ class _MyHomePageState extends State<MyHomePage> {
       _inFilterMode=bool;
       _inSearchMode=false;
     });
-    // if(_inFilterMode)openDropdown();
   }
 }

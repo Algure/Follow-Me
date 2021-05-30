@@ -3,13 +3,13 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:follow_me/azure.dart';
-import 'package:follow_me/constants.dart';
+import '../utilities/azure.dart';
+import '../utilities/constants.dart';
 import 'package:follow_me/data_objects/profile.dart';
-import 'package:follow_me/keys.dart';
-import 'package:follow_me/my_button.dart';
+import '../utilities/keys.dart';
+import '../custom_widgets/my_button.dart';
 import 'package:follow_me/screens/home_screen.dart';
-import 'package:follow_me/utitlity_functions.dart';
+import '../utilities/utitlity_functions.dart';
 import 'package:http/http.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:uuid/uuid.dart';
@@ -25,11 +25,12 @@ class _LoginScreenState extends State<LoginScreen> {
   bool selected=false;
   bool _passInFocus= false;
   String _link='';
-  Color hintColor=Colors.grey;
-  Color hintSelectedColor=Colors.blue;
   String? _iconString;
   String  _password='';
   Widget _socialIcon=SizedBox.shrink();
+
+  Color hintColor=Colors.grey;
+  Color hintSelectedColor=Colors.blue;
 
   TextEditingController? _linkController;
   TextEditingController? _passController;
@@ -43,7 +44,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   void didChangeDependencies() {
-    waitAndSetTrueAnim();
+    _waitAndSetTrueAnim();
   }
 
   @override
@@ -52,130 +53,144 @@ class _LoginScreenState extends State<LoginScreen> {
       backgroundColor: Colors.white,
       body: Padding(
         padding: const EdgeInsets.all(18.0),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Hero(
-                tag: 'fologo',
-                child: AnimatedContainer(
-                  width: selected ? 200.0 : 0.0,
-                  height: selected ? 100.0 : 0.0,
-                  // color: Colors.red : Colors.blue,
-                  alignment:Alignment.center,
-                  duration: Duration(milliseconds: 2000) ,
-                  curve: Curves.fastLinearToSlowEaseIn,
-                  child: Image.asset('images/logo.png', color: Colors.blue, height: 75, width: 300,),
-                ),
-              ),
-              SizedBox(height: 20,),
-
-              Focus(
-                onFocusChange: (hasFocus) {
-                  setState(() => _linkInFocus=hasFocus);
-                },
-                child: TextFormField(
-                    controller:_linkController,
-                    style: TextStyle(color: Colors.black),//kInputTextStyle,
-                    textAlign: TextAlign.start,
-                    autofocus: false,
-                    onEditingComplete: (){
-                      // setState(() {
-                      //   _descFocus.unfocus();
-                      // });
-                    },
-                    onChanged: (text){
-                      _link=text;
-                      _setSocialIcon();
-                      },
-                    textInputAction: TextInputAction.next,
-                    decoration: InputDecoration(
-                        filled: true,
-                        fillColor: Colors.white,
-                        labelText: 'Please enter your social link (Twitter link)',
-                        labelStyle: TextStyle(
-                            color:_linkInFocus?hintSelectedColor:hintColor
-                        ),
-                        suffixIcon: Padding(padding: EdgeInsets.all(5),child: _socialIcon),
-                        focusedBorder: kLinedFocusedBorder,
-                        enabledBorder: kLinedBorder,
-                        disabledBorder: kLinedBorder
-                    )
-                ),
-              ),
-              SizedBox(height: 20,),
-              Focus(
-                onFocusChange: (hasFocus) {
-                  setState(() => _passInFocus=hasFocus);
-                },
-                child: TextFormField(
-                    controller: _passController,
-                    style: TextStyle(color: Colors.black),//kInputTextStyle,
-                    textAlign: TextAlign.start,
-                    autofocus: false,
-                    onEditingComplete: (){
-                      // setState(() {
-                      //   _descFocus.unfocus();
-                      // });
-                    },
-                    onChanged: (text){
-                      _password=text;
-                      // _setSocialIcon();
-                      },
-                    obscureText: showPassword?false:true,
-                    textInputAction: TextInputAction.done,
-                    decoration: InputDecoration(
-                        filled: true,
-                        fillColor: Colors.white,
-                        labelText: 'Please enter your password',
-                        labelStyle: TextStyle(
-                            color:_passInFocus?hintSelectedColor:hintColor
-                        ),
-                        // suffixIcon: Padding(padding: EdgeInsets.all(5),child: Icon(Icons.lock)),
-                        suffixIcon: IconButton(icon: Icon(showPassword?Icons.visibility_off:Icons.visibility, color: Colors.grey,), onPressed: toggleIconVisibility,),
-                        focusedBorder: kLinedFocusedBorder,
-                        enabledBorder: kLinedBorder,
-                        disabledBorder: kLinedBorder
-                    )
-                ),
-              ),
-              SizedBox(height: 20,),
-              Row(
-                children:[
-
-                  Expanded(
-                    child: MyButton(buttonColor: Colors.blue,
-                    onPressed:() async {
-                      _login();
-                    },
-                    textColor: Colors.white, text: 'Login', ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            SingleChildScrollView(
+              child: Column(
+                children: [
+                  Hero(
+                    tag: 'fologo',
+                    child: AnimatedContainer(
+                      width: selected ? 200.0 : 0.0,
+                      height: selected ? 200.0 : 0.0,
+                      // color: Colors.red : Colors.blue,
+                      alignment:Alignment.center,
+                      duration: Duration(milliseconds: 2000) ,
+                      curve: Curves.fastLinearToSlowEaseIn,
+                      child: Image.asset('images/logo.png', color: Colors.blue, height: 75, width: 300,),
+                    ),
                   ),
-                  SizedBox(width: 15,),
-                  Expanded(
-                    child: MyButton(buttonColor: Colors.black,
-                    textColor: Colors.white,
-                    onPressed:() async {
-                      _signup();
-                    }, text: 'Sign Up', ),
+                  SizedBox(height: 20,),
+                  Container(
+                    height: 50,
+                    child: Focus(
+                      onFocusChange: (hasFocus) {
+                        setState(() => _linkInFocus=hasFocus);
+                      },
+                      child: TextFormField(
+                          controller:_linkController,
+                          style: TextStyle(color: Colors.black),//kInputTextStyle,
+                          textAlign: TextAlign.start,
+                          autofocus: false,
+                          onEditingComplete: (){
+                            // setState(() {
+                            //   _descFocus.unfocus();
+                            // });
+                          },
+                          onChanged: (text){
+                            _link=text;
+                            _setSocialIcon();
+                          },
+                          textInputAction: TextInputAction.next,
+                          decoration: InputDecoration(
+                              filled: true,
+                              fillColor: Colors.white,
+                              labelText: 'Please enter your social link (Twitter link)',
+                              labelStyle: TextStyle(
+                                  color:_linkInFocus?hintSelectedColor:hintColor
+                              ),
+                              suffixIcon: Padding(padding: EdgeInsets.all(5),child: _socialIcon),
+                              focusedBorder: kLinedFocusedBorder,
+                              enabledBorder: kLinedBorder,
+                              disabledBorder: kLinedBorder
+                          )
+                      ),
+                    ),
                   ),
-                  ]
-              ),
-              Spacer(),
-              Text('Powered by Azure', style:  TextStyle(color: Colors.blue.shade900, fontSize: 12),),
-              SizedBox(height: 20,),
+                  SizedBox(height: 20,),
+                  Container(
+                    height: 50,
+                    child: Focus(
+                      onFocusChange: (hasFocus) {
+                        setState(() => _passInFocus=hasFocus);
+                      },
+                      child: TextFormField(
+                          controller: _passController,
+                          style: TextStyle(color: Colors.black),//kInputTextStyle,
+                          textAlign: TextAlign.start,
+                          autofocus: false,
+                          onEditingComplete: (){
+                            // setState(() {
+                            //   _descFocus.unfocus();
+                            // });
+                          },
+                          onChanged: (text){
+                            _password=text;
+                            // _setSocialIcon();
+                          },
+                          obscureText: showPassword?false:true,
+                          textInputAction: TextInputAction.done,
+                          decoration: InputDecoration(
+                              filled: true,
+                              fillColor: Colors.white,
+                              labelText: 'Please enter your password',
+                              labelStyle: TextStyle(
+                                  color:_passInFocus?hintSelectedColor:hintColor
+                              ),
+                              // suffixIcon: Padding(padding: EdgeInsets.all(5),child: Icon(Icons.lock)),
+                              suffixIcon: IconButton(icon: Icon(showPassword?Icons.visibility_off:Icons.visibility, color: Colors.grey,), onPressed: _toggleIconVisibility,),
+                              focusedBorder: kLinedFocusedBorder,
+                              enabledBorder: kLinedBorder,
+                              disabledBorder: kLinedBorder
+                          )
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 20,),
+                  SizedBox(
+                    height: 50,
+                    child: Row(
+                        children:[
 
-            ],
-          ),
+                          Expanded(
+                            child: MyButton(buttonColor: Colors.blue,
+                              onPressed:() async {
+                                _login();
+                              },
+                              textColor: Colors.white, text: 'Login', ),
+                          ),
+                          SizedBox(width: 15,),
+                          Expanded(
+                            child: MyButton(buttonColor: Colors.black,
+                              textColor: Colors.white,
+                              onPressed:() async {
+                                _signup();
+                              }, text: 'Sign Up', ),
+                          ),
+                        ]
+                    ),
+                  ),
+                ],
+              ),
+            ),
+           Spacer(),
+            Container(
+               height: 30,
+                child: Text('Powered by Azure', style:  TextStyle(color: Colors.blue.shade900, fontWeight: FontWeight.w900, fontSize: 12),)),
+            SizedBox(height: 20,),
+
+          ],
         ),
       ),
     );
   }
 
-  toggleIconVisibility(){
-    showPassword=!showPassword;
+  _toggleIconVisibility(){
     setState(() {
-
+      showPassword=!showPassword;
     });
   }
 
@@ -190,15 +205,14 @@ class _LoginScreenState extends State<LoginScreen> {
         return;
     }
     if(_iconString!=iconString){
-      _iconString=iconString;
-      _socialIcon=Image.asset(_iconString??'', height: 20, width: 20,);
       setState(() {
-
+        _iconString=iconString;
+        _socialIcon=Image.asset(_iconString??'', height: 20, width: 20,);
       });
     }
   }
 
-  void showProgress(bool bool) {
+  void _showProgress(bool bool) {
     if(bool)EasyLoading.show(status: 'loading...');
     else EasyLoading.dismiss();
     setState(() {
@@ -207,39 +221,39 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   _signup() async{
-    showProgress(true);
+    _showProgress(true);
     try {
       _link = _link.trim();
       while(_link.endsWith('/')){
         _link=_link.substring(0, _link.length-1);
       }
       if (_link == null || _link.isEmpty) {
-        showProgress(false);
+        _showProgress(false);
         uShowErrorNotification('Social link cannot be empty');
         return;
       } else if (!(await canLaunch(_link))) {
-        showProgress(false);
+        _showProgress(false);
         uShowErrorNotification('Invalid social link');
         return;
       } else if (_iconString == null || _iconString!.isEmpty) {
-        showProgress(false);
+        _showProgress(false);
         uShowErrorNotification(
             'Social link not recognised. Please try another !');
         return;
       }
       _password = _password.trim();
       if (_password == null || _password.isEmpty) {
-        showProgress(false);
+        _showProgress(false);
         uShowErrorNotification('Password cannot be empty');
         return;
       } else if (_password.length < 3) {
-        showProgress(false);
+        _showProgress(false);
         uShowErrorNotification('Password is too short');
         return;
       }
       Profile? tprf = await AzureSingle().fetchProfile(_link);
       if(tprf!=null && tprf.id!=null && tprf.id!.length>5){
-        showProgress(false);
+        _showProgress(false);
         uShowErrorNotification('This link is registered');
         return;
       }
@@ -258,44 +272,44 @@ class _LoginScreenState extends State<LoginScreen> {
       await uSetPrefsValue(kIdkey, mProfile.id);
       await uSetPrefsValue(kLinkKey, _link);
       await uSetPrefsValue(kPassKey, _password);
-      showProgress(false);
+      _showProgress(false);
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyHomePage(title: 'Home',)));
     }catch(e,t){
       print('error: $e, trace: $t');
       if(e.runtimeType==AuthException) uShowErrorNotification('${(e as AuthException).message}');
       else uShowErrorNotification('An error occured !');
     }
-    showProgress(false);
+    _showProgress(false);
   }
 
-  Future<String?> getId() async{
+  Future<String?> _getId() async{
     String id= (await uGetSharedPrefValue(kIdkey))??'';
-    if(id.length<5)return generateRandomId();
+    if(id.length<5)return _generateRandomId();
     return id;
   }
 
-  String generateRandomId() {
+  String _generateRandomId() {
     var uuid = Uuid();
     return 'a'+uuid.v1().replaceAll('-', '');
   }
 
   _login() async {
-    showProgress(true);
+    _showProgress(true);
     try {
       _link = _link.trim().toLowerCase();
       while(_link.endsWith('/')){
         _link=_link.substring(0, _link.length-1);
       }
       if (_link == null || _link.isEmpty) {
-        showProgress(false);
+        _showProgress(false);
         uShowErrorNotification('Social link cannot be empty');
         return;
       } else if (!(await canLaunch(_link))) {
-        showProgress(false);
+        _showProgress(false);
         uShowErrorNotification('Invalid social link');
         return;
       } else if (_iconString == null || _iconString!.isEmpty) {
-        showProgress(false);
+        _showProgress(false);
         uShowErrorNotification(
             'Social link not recognised. Please try another !');
         return;
@@ -303,11 +317,11 @@ class _LoginScreenState extends State<LoginScreen> {
 
       _password = _password.trim();
       if (_password == null || _password.isEmpty|| _password.isEmpty) {
-        showProgress(false);
+        _showProgress(false);
         uShowErrorNotification('Password cannot be empty');
         return;
       } else if (_password.length < 3) {
-        showProgress(false);
+        _showProgress(false);
         uShowErrorNotification('Password is too short');
         return;
       }
@@ -351,7 +365,7 @@ class _LoginScreenState extends State<LoginScreen> {
         await uSetPrefsValue(kIdkey, '$id');
         await uSetPrefsValue(kLinkKey, _link);
         await uSetPrefsValue(kPassKey, _password);
-        showProgress(false);
+        _showProgress(false);
         Navigator.pushReplacement(context,
             MaterialPageRoute(builder: (context) => MyHomePage(title: 'Home',)));
       }else{
@@ -364,7 +378,7 @@ class _LoginScreenState extends State<LoginScreen> {
       else if(e.toString().contains('Profile not found.'))uShowErrorNotification('Profile not found.');
       else uShowErrorNotification('An error occured');
     }
-    showProgress(false);
+    _showProgress(false);
 
   }
 
@@ -384,7 +398,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return null;
   }
 
-  void waitAndSetTrueAnim() {
+  void _waitAndSetTrueAnim() {
     Future.delayed(Duration(seconds: 1),(){
      setState(() {
        selected=true;

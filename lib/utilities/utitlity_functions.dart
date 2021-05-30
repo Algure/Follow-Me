@@ -1,6 +1,6 @@
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
-import 'package:follow_me/constants.dart';
+import 'constants.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -24,7 +24,6 @@ void uShowErrorNotification(String text){
 void uShowOkNotification(String text){
   showSimpleNotification(
       Text(text, style: kNavTextStyle,),
-      // leading:Icon(Icons.ok, color:Colors.white),
       background: Colors.green);
 }
 
@@ -35,7 +34,7 @@ Future<void> uSetPrefsValue(String key, var value) async {
   }
   await sp.reload();
   await sp.setString(key, value.toString());
-  await sp.commit();
+  // await sp.commit();
 }
 
 Future<dynamic> uGetSharedPrefValue(String key) async {

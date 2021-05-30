@@ -6,16 +6,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_progress_hud/flutter_progress_hud.dart';
-import 'package:follow_me/azure.dart';
+import '../utilities/azure.dart';
 import 'package:follow_me/data_objects/profile.dart';
-import 'package:follow_me/my_button.dart';
-import 'package:follow_me/utitlity_functions.dart';
+import '../custom_widgets/my_button.dart';
+import '../utilities/utitlity_functions.dart';
 import 'package:http/http.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:uuid/uuid.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
-import '../constants.dart';
+import '../utilities/constants.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -46,7 +46,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     _setProfile();
-    uGetGoogleDate();
   }
 
   @override
@@ -300,7 +299,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   _setProfile() async {
-    showProgress(true);
+    _showProgress(true);
     Profile? prf;
 
 
@@ -343,7 +342,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     _tittle= _tittle.replaceAll('null', '');
     _age= _age.replaceAll('null', '');
     print('age: $_age, _tittle: $_tittle, _link: $_link, _fname:$_fname, _sname: $_sname , image: $imageIndex}');
-    showProgress(false);
+    _showProgress(false);
   }
 
   List<Widget> _getAvatarChoices() {
@@ -372,53 +371,53 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<void> _uploadProfile() async {
-    showProgress(true);
+    _showProgress(true);
     try{
     _fname = _fname.trim();
     if (_fname == null || _fname.isEmpty) {
-      showProgress(false);
+      _showProgress(false);
       uShowErrorNotification ('First name cannot be empty');
       return;
     } else if (_fname.contains(' ')) {
-      showProgress(false);
+      _showProgress(false);
       uShowErrorNotification(
            'First name cannot contain white/empty space');
       return;
     }else if(_fname.length>nameLength){
-      showProgress(false);
+      _showProgress(false);
       uShowErrorNotification( 'First name length is too long');
       return;
     }
 
     _sname = _sname.trim();
     if (_sname == null || _sname.isEmpty) {
-      showProgress(false);
+      _showProgress(false);
       uShowErrorNotification( 'Last/Sur name cannot be empty');
       return;
     } else if (_sname.contains(' ')) {
-      showProgress(false);
+      _showProgress(false);
       uShowErrorNotification(
            'Last/Sur name cannot contain white/empty space');
       return;
     }else if(_sname.length>nameLength){
-      showProgress(false);
+      _showProgress(false);
       uShowErrorNotification('Last name length is too long');
       return;
     }
 
     _link = _link.trim();
     if (_link == null || _link.isEmpty) {
-      showProgress(false);
+      _showProgress(false);
       uShowErrorNotification('Twitter link cannot be empty');
       return;
     } else if (!(await canLaunch(_link))) {
-      showProgress(false);
+      _showProgress(false);
       uShowErrorNotification( 'Invalid twitter link');
       return;
     }
 
     if (!(await uCheckInternet())) {
-      showProgress(false);
+      _showProgress(false);
       uShowErrorNotification('No internet connection detected !');
       return;
     }
@@ -428,19 +427,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
     uShowErrorNotification( 'An error occured. Please check inputs.');
     print('error: $e, $t');
   }
-  showProgress(false);
-  }
-
-  Future<void> uGetGoogleDate() async {
-      String url='https://google.com/';
-    var response=await get(Uri.parse(url));
-    String? dateBase = response.headers['date'];
-    print(dateBase);
+  _showProgress(false);
   }
 
   Future<void> _updateProfile() async {
     Profile mProfile = Profile()
-        ..id= await getId()
+        ..id= await _getId()
         ..age= (_age.isNotEmpty)?int.tryParse(_age)??0:0
         ..name='$_fname $_sname'
         ..link=_link
@@ -454,12 +446,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
     await uSetPrefsValue(kLinkKey,_link);
   }
 
-  String generateRandomId() {
+  String _generateRandomId() {
     var uuid = Uuid();
     return 'a'+uuid.v1().replaceAll('-', '');
   }
 
-  void showProgress(bool bool) {
+  void _showProgress(bool bool) {
     if(bool)EasyLoading.show(status: 'loading...');
     else EasyLoading.dismiss();
     setState(() {
@@ -467,9 +459,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
     });
   }
 
-  Future<String?> getId() async{
+  Future<String?> _getId() async{
     String id= (await uGetSharedPrefValue(kIdkey))??'';
-    if(id.length<5)return generateRandomId();
+    if(id.length<5)return _generateRandomId();
     return id;
   }
 }

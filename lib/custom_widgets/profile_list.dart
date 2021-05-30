@@ -1,11 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:follow_me/constants.dart';
+import '../utilities/constants.dart';
 import 'package:follow_me/data_objects/profile.dart';
 import 'package:follow_me/screens/description_screen.dart';
-import 'package:follow_me/screens/profile_screen.dart';
-import 'package:follow_me/utitlity_functions.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class ProfileLitem extends StatelessWidget {
 
@@ -31,7 +28,7 @@ class ProfileLitem extends StatelessWidget {
             },
             child: ListTile(
               leading: Hero(
-                tag: profile.id!??'naSDa',
+                tag: profile.id!,
                 child: Container(
                   height: 50,
                   width: 50,
@@ -65,13 +62,6 @@ class ProfileLitem extends StatelessWidget {
     );
   }
 
-  Future<void> _launchTwitter() async {
-    if(await canLaunch(profile.id!)){
-      launch(profile.id!);
-    }else{
-      uShowErrorNotification('Can\'t launch url');
-    }
-  }
 
   String _getImageIcon() {
     String temp=profile.link!.toString().toLowerCase();

@@ -32,7 +32,7 @@
 /build/
 
 #My ignored files
-lib/keys.dart
+lib/utilities/keys.dart
 
 # Web related
 lib/generated_plugin_registrant.dart
