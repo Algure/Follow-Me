@@ -55,13 +55,13 @@ class _LoginScreenState extends State<LoginScreen> {
         padding: const EdgeInsets.all(18.0),
         child: Container(
           width: double.infinity,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              SingleChildScrollView(
-                child: Card(
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Card(
                   elevation: 8,
                   child: Container(
                     constraints: BoxConstraints(
@@ -183,18 +183,21 @@ class _LoginScreenState extends State<LoginScreen> {
                               ]
                           ),
                         ),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height*0.1,
+                        ),
+                        Container(
+                            height: 30,
+                            child: Text('Powered by Azure', style:  TextStyle(color: Colors.blue.shade900, fontWeight: FontWeight.w900, fontSize: 12),)),
+                        SizedBox(height: 20,),
                       ],
                     ),
                   ),
                 ),
-              ),
-             Spacer(),
-              Container(
-                 height: 30,
-                  child: Text('Powered by Azure', style:  TextStyle(color: Colors.blue.shade900, fontWeight: FontWeight.w900, fontSize: 12),)),
-              SizedBox(height: 20,),
 
-            ],
+
+              ],
+            ),
           ),
         ),
       ),
@@ -386,7 +389,7 @@ class _LoginScreenState extends State<LoginScreen> {
       }
     }catch(e,t){
       print('Error: $e, trace: $t');
-      if(e.runtimeType==AuthException) uShowErrorNotification('${(e as AuthException).message}');
+      if(e.runtimeType==AuthException && !(e as AuthException).message.contains('<')) uShowErrorNotification('${(e as AuthException).message}');
       else if(e.toString().contains('Wrong password'))uShowErrorNotification('Wrong password !');
       else if(e.toString().contains('Profile not found.'))uShowErrorNotification('Profile not found.');
       else uShowErrorNotification('An error occured');

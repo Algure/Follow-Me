@@ -66,6 +66,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           builder: (context)=>SingleChildScrollView(
             child: Container(
               padding: EdgeInsets.all(16),
+              width: double.infinity,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -75,225 +76,237 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         child: Image.asset(kAvatarList[imageIndex], height: MediaQuery.of(context).size.height*0.2,)
                     ),
                   ),
-                  CarouselSlider(
-                      items: _getAvatarChoices()
-                      , options: CarouselOptions(height: 120,
-                      enlargeCenterPage: true,
-                      viewportFraction: 0.3,//MediaQuery.of(context).size.width>500? 0.1:0.4
-                  )),
                   Container(
                     constraints: BoxConstraints(
-                      maxWidth: 400
+                        maxWidth: 800
                     ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Container(
-                          height: 70,
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Container(
-                                  // margin: EdgeInsets.symmetric(horizontal:marginVal),
-                                  child: Focus(
-                                    onFocusChange: (hasFocus) {
-                                      setState(() => _fnameInFocus=hasFocus);
-                                    },
-                                    child: TextFormField(
-                                      onChanged: (string){_fname=string;},
-                                      autofocus: false,
-                                      maxLength: nameLength,
-                                      controller: TextEditingController(
-                                          text: _fname
-                                      ),
-                                      onEditingComplete: (){
+                    child: CarouselSlider(
+
+                        items: _getAvatarChoices()
+                        , options: CarouselOptions(height: 120,
+                        enlargeCenterPage: true,
+                        viewportFraction: 0.3,//MediaQuery.of(context).size.width>500? 0.1:0.4
+                    )),
+                  ),
+                  Card(
+                    elevation: 10,
+                    child: Container(
+                      constraints: BoxConstraints(
+                        maxWidth: 800
+                      ),
+                      color: Colors.white,
+                      padding: EdgeInsets.all(18),
+                      margin: EdgeInsets.all(18),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Container(
+                            height: 70,
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Container(
+                                    // margin: EdgeInsets.symmetric(horizontal:marginVal),
+                                    child: Focus(
+                                      onFocusChange: (hasFocus) {
+                                        setState(() => _fnameInFocus=hasFocus);
                                       },
-                                      inputFormatters:[
-                                        LengthLimitingTextInputFormatter(nameLength)
-                                      ],
-                                      decoration: InputDecoration(
-                                          filled: true,
+                                      child: TextFormField(
+                                        onChanged: (string){_fname=string;},
+                                        autofocus: false,
+                                        maxLength: nameLength,
+                                        controller: TextEditingController(
+                                            text: _fname
+                                        ),
+                                        onEditingComplete: (){
+                                        },
+                                        inputFormatters:[
+                                          LengthLimitingTextInputFormatter(nameLength)
+                                        ],
+                                        decoration: InputDecoration(
+                                            filled: true,
 
 //                            prefixIcon: Icon(CupertinoIcons.person, color: Colors.white,),
-                                          labelText: 'First name',
-                                          labelStyle: TextStyle(
-                                              color:_fnameInFocus?hintSelectedColor:hintColor
-                                          ),
-                                          // hintText: 'Enter  name',
-                                          // hintStyle: TextStyle(
-                                          //     color:hintColor
-                                          // ),
-                                          counterStyle: kHintStyle,
-                                          fillColor: textFillColor,
-                                          focusedBorder: kLinedFocusedBorder,
-                                          enabledBorder: kLinedBorder,
-                                          disabledBorder: kLinedBorder
+                                            labelText: 'First name',
+                                            labelStyle: TextStyle(
+                                                color:_fnameInFocus?hintSelectedColor:hintColor
+                                            ),
+                                            // hintText: 'Enter  name',
+                                            // hintStyle: TextStyle(
+                                            //     color:hintColor
+                                            // ),
+                                            counterStyle: kHintStyle,
+                                            fillColor: textFillColor,
+                                            focusedBorder: kLinedFocusedBorder,
+                                            enabledBorder: kLinedBorder,
+                                            disabledBorder: kLinedBorder
+                                        ),
+                                        textInputAction: TextInputAction.next,
+                                        style: TextStyle(color: Colors.black, ),
+                                        keyboardType: TextInputType.name,
                                       ),
-                                      textInputAction: TextInputAction.next,
-                                      style: TextStyle(color: Colors.black, ),
-                                      keyboardType: TextInputType.name,
                                     ),
                                   ),
                                 ),
-                              ),
-                              SizedBox(width: 30,),
-                              Expanded(
-                                child: Container(
-                                  // margin: EdgeInsets.symmetric(horizontal:marginVal),
-                                  child: Focus(
-                                    onFocusChange: (hasFocus) {
-                                      setState(() => _snameInFocus=hasFocus);
-                                    },
-                                    child: TextFormField(
-                                      onChanged: (string){_sname=string;},
-                                      maxLength: nameLength,
-                                      controller: TextEditingController(
-                                          text: _sname
-                                      ),
-                                      autofocus: false,
-                                      onEditingComplete: (){
-                                        // setState(() {
-                                        //   _snameFocus.unfocus();
-                                        // });
+                                SizedBox(width: 30,),
+                                Expanded(
+                                  child: Container(
+                                    // margin: EdgeInsets.symmetric(horizontal:marginVal),
+                                    child: Focus(
+                                      onFocusChange: (hasFocus) {
+                                        setState(() => _snameInFocus=hasFocus);
                                       },
-                                      inputFormatters:[
-                                        LengthLimitingTextInputFormatter(nameLength)
-                                      ],
-                                      decoration: InputDecoration(
-                                          filled: true,
+                                      child: TextFormField(
+                                        onChanged: (string){_sname=string;},
+                                        maxLength: nameLength,
+                                        controller: TextEditingController(
+                                            text: _sname
+                                        ),
+                                        autofocus: false,
+                                        onEditingComplete: (){
+                                          // setState(() {
+                                          //   _snameFocus.unfocus();
+                                          // });
+                                        },
+                                        inputFormatters:[
+                                          LengthLimitingTextInputFormatter(nameLength)
+                                        ],
+                                        decoration: InputDecoration(
+                                            filled: true,
 //                              prefixIcon: Icon(CupertinoIcons.person, color: Colors.white,),
-                                          labelText: 'Last name',
-                                          labelStyle: TextStyle(
-                                              color:_snameInFocus?hintSelectedColor:hintColor
-                                          ),
-                                          // hintStyle: TextStyle(
-                                          //     color: Colors.grey
-                                          // ),
-                                          counterStyle: kHintStyle,
-                                          helperStyle: TextStyle(color: Colors.blue),
-                                          fillColor: textFillColor,
-                                          focusedBorder: kLinedFocusedBorder,
-                                          enabledBorder: kLinedBorder,
-                                          disabledBorder: kLinedBorder
+                                            labelText: 'Last name',
+                                            labelStyle: TextStyle(
+                                                color:_snameInFocus?hintSelectedColor:hintColor
+                                            ),
+                                            // hintStyle: TextStyle(
+                                            //     color: Colors.grey
+                                            // ),
+                                            counterStyle: kHintStyle,
+                                            helperStyle: TextStyle(color: Colors.blue),
+                                            fillColor: textFillColor,
+                                            focusedBorder: kLinedFocusedBorder,
+                                            enabledBorder: kLinedBorder,
+                                            disabledBorder: kLinedBorder
+                                        ),
+                                        textInputAction: TextInputAction.next,
+                                        style: TextStyle(color: Colors.black),
+                                        keyboardType: TextInputType.name,
                                       ),
-                                      textInputAction: TextInputAction.next,
-                                      style: TextStyle(color: Colors.black),
-                                      keyboardType: TextInputType.name,
                                     ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                        SizedBox(height: 20,),
-                        Focus(
-                          onFocusChange: (hasFocus) {
-                            setState(() => _ageInFocus=hasFocus);
-                          },
-                          child: TextField(
-                              controller: TextEditingController(
-                                  text: _age
-                              ),
-                              style: TextStyle(color: Colors.black),//kInputTextStyle,
-                              textAlign: TextAlign.start,
-                              autofocus: false,
-                              onEditingComplete: (){
-                                // setState(() {
-                                //   _descFocus.unfocus();
-                                // });
-                              },
-                              keyboardType: TextInputType.number,
-                              maxLength: _tittleLength,
-                              onChanged: (text){_age=text;},
-                              textInputAction: TextInputAction.next,
-                              decoration: InputDecoration(
-                                  filled: true,
-                                  fillColor: Colors.white,
-                                  labelText: 'Please enter your age. (Private 🔒)',
-                                  labelStyle: TextStyle(
-                                      color:_ageInFocus?hintSelectedColor:hintColor
-                                  ),
-                                  focusedBorder: kLinedFocusedBorder,
-                                  enabledBorder: kLinedBorder,
-                                  disabledBorder: kLinedBorder
-                              )
+                          SizedBox(height: 20,),
+                          Focus(
+                            onFocusChange: (hasFocus) {
+                              setState(() => _ageInFocus=hasFocus);
+                            },
+                            child: TextField(
+                                controller: TextEditingController(
+                                    text: _age
+                                ),
+                                style: TextStyle(color: Colors.black),//kInputTextStyle,
+                                textAlign: TextAlign.start,
+                                autofocus: false,
+                                onEditingComplete: (){
+                                  // setState(() {
+                                  //   _descFocus.unfocus();
+                                  // });
+                                },
+                                keyboardType: TextInputType.number,
+                                maxLength: _tittleLength,
+                                onChanged: (text){_age=text;},
+                                textInputAction: TextInputAction.next,
+                                decoration: InputDecoration(
+                                    filled: true,
+                                    fillColor: Colors.white,
+                                    labelText: 'Please enter your age. (Private 🔒)',
+                                    labelStyle: TextStyle(
+                                        color:_ageInFocus?hintSelectedColor:hintColor
+                                    ),
+                                    focusedBorder: kLinedFocusedBorder,
+                                    enabledBorder: kLinedBorder,
+                                    disabledBorder: kLinedBorder
+                                )
+                            ),
                           ),
-                        ),
-                        SizedBox(height: 20,),
-                        Focus(
-                          onFocusChange: (hasFocus) {
-                            setState(() => _descInFocus=hasFocus);
-                          },
-                          child: TextFormField(
-                              controller: TextEditingController(
-                                  text: _tittle
-                              ),
-                              style: TextStyle(color: Colors.black),//kInputTextStyle,
-                              textAlign: TextAlign.start,
-                              autofocus: false,
-                              onEditingComplete: (){
-                                // setState(() {
-                                //   _descFocus.unfocus();
-                                // });
-                              },
-                              // maxLength: _tittleLength,
-                              maxLines: 7,
-                              onChanged: (text){_tittle=text;},
-                              textInputAction: TextInputAction.next,
-                              decoration: InputDecoration(
-                                  filled: true,
-                                  fillColor: Colors.white,
-                                  labelText: 'Why follow you?',
-                                  labelStyle: TextStyle(
-                                      color:_descInFocus?hintSelectedColor:hintColor
-                                  ),
-                                  focusedBorder: kLinedFocusedBorder,
-                                  enabledBorder: kLinedBorder,
-                                  disabledBorder: kLinedBorder
-                              )
+                          SizedBox(height: 20,),
+                          Focus(
+                            onFocusChange: (hasFocus) {
+                              setState(() => _descInFocus=hasFocus);
+                            },
+                            child: TextFormField(
+                                controller: TextEditingController(
+                                    text: _tittle
+                                ),
+                                style: TextStyle(color: Colors.black),//kInputTextStyle,
+                                textAlign: TextAlign.start,
+                                autofocus: false,
+                                onEditingComplete: (){
+                                  // setState(() {
+                                  //   _descFocus.unfocus();
+                                  // });
+                                },
+                                // maxLength: _tittleLength,
+                                maxLines: 7,
+                                onChanged: (text){_tittle=text;},
+                                textInputAction: TextInputAction.next,
+                                decoration: InputDecoration(
+                                    filled: true,
+                                    fillColor: Colors.white,
+                                    labelText: 'Why follow you?',
+                                    labelStyle: TextStyle(
+                                        color:_descInFocus?hintSelectedColor:hintColor
+                                    ),
+                                    focusedBorder: kLinedFocusedBorder,
+                                    enabledBorder: kLinedBorder,
+                                    disabledBorder: kLinedBorder
+                                )
+                            ),
                           ),
-                        ),
-                        SizedBox(height: 20,),
-                        Focus(
-                          onFocusChange: (hasFocus) {
-                            setState(() => _linkInFocus=hasFocus);
-                          },
-                          child: TextField(
-                              controller: TextEditingController(
-                                  text: _link
-                              ),
-                              style: TextStyle(color: Colors.black),//kInputTextStyle,
-                              textAlign: TextAlign.start,
-                              autofocus: false,
-                              enabled: false,
-                              onEditingComplete: (){
-                                // setState(() {
-                                //   _descFocus.unfocus();
-                                // });
-                              },
-                              onChanged: (text){_link=text;},
-                              textInputAction: TextInputAction.next,
-                              decoration: InputDecoration(
-                                  filled: true,
-                                  fillColor: textFillColor,
-                                  labelText: 'Twitter link.',
-                                  labelStyle: TextStyle(
-                                      color:_linkInFocus?hintSelectedColor:hintColor
-                                  ),
-                                  focusedBorder: kLinedFocusedBorder,
-                                  enabledBorder: kLinedBorder,
-                                  disabledBorder: kLinedBorder
-                              )
+                          SizedBox(height: 20,),
+                          Focus(
+                            onFocusChange: (hasFocus) {
+                              setState(() => _linkInFocus=hasFocus);
+                            },
+                            child: TextField(
+                                controller: TextEditingController(
+                                    text: _link
+                                ),
+                                style: TextStyle(color: Colors.black),//kInputTextStyle,
+                                textAlign: TextAlign.start,
+                                autofocus: false,
+                                enabled: false,
+                                onEditingComplete: (){
+                                  // setState(() {
+                                  //   _descFocus.unfocus();
+                                  // });
+                                },
+                                onChanged: (text){_link=text;},
+                                textInputAction: TextInputAction.next,
+                                decoration: InputDecoration(
+                                    filled: true,
+                                    fillColor: textFillColor,
+                                    labelText: 'Twitter link.',
+                                    labelStyle: TextStyle(
+                                        color:_linkInFocus?hintSelectedColor:hintColor
+                                    ),
+                                    focusedBorder: kLinedFocusedBorder,
+                                    enabledBorder: kLinedBorder,
+                                    disabledBorder: kLinedBorder
+                                )
+                            ),
                           ),
-                        ),
-                        SizedBox(height: 20,),
-                        MyButton(buttonColor: Colors.blue,
-                          onPressed:() async {
-                            _uploadProfile();
-                          },
-                          textColor: Colors.white, text: 'Update', ),
-                      ],
+                          SizedBox(height: 20,),
+                          MyButton(buttonColor: Colors.blue,
+                            onPressed:() async {
+                              _uploadProfile();
+                            },
+                            textColor: Colors.white, text: 'Update', ),
+                        ],
+                      ),
                     ),
                   ),
 

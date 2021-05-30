@@ -31,16 +31,16 @@ class _MyHomePageState extends State<MyHomePage> {
 
   List<Widget> proWidgets= [];
   List<DropdownMenuItem<String>> _filterList=[
-      DropdownMenuItem<String>(child: Text( ''), value: '') ,
-      DropdownMenuItem<String>(child: Text( 'Age-range: 1-10'), value: '1-10') ,
-      DropdownMenuItem<String>(child: Text('Age-range: 11-20',), value:'11-20') ,
-      DropdownMenuItem<String>(child: Text('Age-range: 21-30'), value:'21-30') ,
-      DropdownMenuItem<String>(child: Text('Age-range: 31-40'), value:'31-40') ,
-      DropdownMenuItem<String>(child: Text('Age-range: 41-50'), value:'41-50') ,
-      DropdownMenuItem<String>(child: Text('Age-range: 51-60'), value:'51-60') ,
-      DropdownMenuItem<String>(child: Text('Age-range: 61-70'), value:'61-70') ,
-      DropdownMenuItem<String>(child: Text('Age-range: 71-80'), value:'71-80') ,
-      DropdownMenuItem<String>(child: Text('Age-range: 90-100'), value:'90-100') ,
+      DropdownMenuItem<String>(child: Text( 'Select range', overflow: TextOverflow.ellipsis,), value: '') ,
+      DropdownMenuItem<String>(child: Text( 'Age-range: 1-10', overflow: TextOverflow.ellipsis,), value: '1-10') ,
+      DropdownMenuItem<String>(child: Text('Age-range: 11-20', overflow: TextOverflow.ellipsis,), value:'11-20') ,
+      DropdownMenuItem<String>(child: Text('Age-range: 21-30', overflow: TextOverflow.ellipsis,), value:'21-30') ,
+      DropdownMenuItem<String>(child: Text('Age-range: 31-40', overflow: TextOverflow.ellipsis,), value:'31-40') ,
+      DropdownMenuItem<String>(child: Text('Age-range: 41-50', overflow: TextOverflow.ellipsis,), value:'41-50') ,
+      DropdownMenuItem<String>(child: Text('Age-range: 51-60', overflow: TextOverflow.ellipsis,), value:'51-60') ,
+      DropdownMenuItem<String>(child: Text('Age-range: 61-70', overflow: TextOverflow.ellipsis,), value:'61-70') ,
+      DropdownMenuItem<String>(child: Text('Age-range: 71-80', overflow: TextOverflow.ellipsis,), value:'71-80') ,
+      DropdownMenuItem<String>(child: Text('Age-range: 90-100', overflow: TextOverflow.ellipsis,), value:'90-100') ,
     ];
 
   RefreshController _rController= RefreshController(initialRefresh: false);
@@ -143,12 +143,13 @@ class _MyHomePageState extends State<MyHomePage> {
               GridView(
                   padding: EdgeInsets.all(10),
                   children:proWidgets,
-                  semanticChildCount: 2,
+                  // semanticChildCount: proWidgets.l,
+                  shrinkWrap: true,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                       mainAxisSpacing: 10,
                       crossAxisSpacing: 10,
-                      childAspectRatio: 0.2
+                      childAspectRatio: 5
                   )
               ):
               SingleChildScrollView(

@@ -1,3 +1,5 @@
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-success.svg?style=flat-square)](https://github.com/Algure/azstore/pulls)
+
 # follow_me
 
 A simple Flutter application powered by Azure to enable you follow me on twitter 🌝
@@ -27,7 +29,7 @@ On the home screen, click on the search icon to reveal a text editor. The key wo
 
 ### Filter
 
-Click on the filter icon to filter through users based on their age range. A dropdown lets you select the filter parameters.
+Click on the filter icon to filter through users based on their age range. A dropdown lets you select the filter parameters. You can drag to refresh the home screen.
 
 Have fun and remember to Follow Me 😉.
 
