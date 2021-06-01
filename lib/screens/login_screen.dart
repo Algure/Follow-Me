@@ -346,41 +346,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
       Profile? prf;
 
-      String tittle = '';
-      String fname = '';
-      String sname = '';
-      String? age = '';
       String? id = '';
-      String? pic = '';
-      // try {
-        prf = await AzureSingle().fetchProfile(_link);
-      // } catch (e, t) {
-      //   print('error: $e,  trace: $t');
-      // }
+      prf = await AzureSingle().fetchProfile(_link);
       if (prf != null) {
-        // List<String> nameData = ((prf.name) ?? '').split(' ');
-        // if (nameData.length == 2) {
-        //   fname = nameData[0];
-        //   sname = nameData[1];
-        //   await uSetPrefsValue(kNameKey, '$fname $sname');
-        // }
-        // id = prf.id!;
-        // tittle = prf.bio!;
-        // age = prf.age != null ? '${prf.age}' : '0';
-        // pic = prf.pic;
-        //
-        // if(id==null || id.isEmpty || id=='null') throw 'Profile not found.';
-        // print(
-        //     'age: $age, _tittle: $tittle, _link: $_link, _fname:$fname, _sname: $sname, pic: $pic');
-        // String savedPass = await AzureSingle().getPassword(id);
-        // print('saved: $savedPass, password:$_password');
-        // if (savedPass != _password) throw "Wrong password";
-        //
-        // await uSetPrefsValue(kBioKey, tittle);
-        // await uSetPrefsValue(kAgeKey, '$age');
-        // await uSetPrefsValue(kPickey, '${prf.pic}');
         id =await AzureSingle().loginOnCloud(_link, _password);
         await uSetPrefsValue(kIdkey, '$id');
+        await uSetPrefsValue(kNameKey, '${prf.name}');
         await uSetPrefsValue(kLinkKey, _link);
         await uSetPrefsValue(kPassKey, _password);
         _showProgress(false);

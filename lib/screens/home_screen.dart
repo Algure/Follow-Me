@@ -1,6 +1,9 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_progress_hud/flutter_progress_hud.dart';
+import 'package:follow_me/utilities/constants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../utilities/azure.dart';
 import 'package:follow_me/custom_widgets/profile_list.dart';
 import 'package:follow_me/data_objects/profile.dart';
@@ -48,6 +51,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     _setProfiles();
+    _promptProfileUpdate();
   }
 
   @override
@@ -183,12 +187,12 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: Text(' Algure', style: TextStyle(fontSize: 10,color: Colors.blue),)),
           ]),
 
-          Row(children:[
-            Text('Avatars from ', style: TextStyle(fontSize: 10,color: Colors.grey),),
-            GestureDetector(
-                onTap: () async {await launch('https://www.freepik.com');},
-                child: Text(' https://www.freepik.com', style: TextStyle(fontSize: 10,color: Colors.blue),)),
-          ]),
+          // Row(children:[
+          //   Text('Avatars from ', style: TextStyle(fontSize: 10,color: Colors.grey),),
+          //   GestureDetector(
+          //       onTap: () async {await launch('https://www.freepik.com');},
+          //       child: Text(' https://www.freepik.com', style: TextStyle(fontSize: 10,color: Colors.blue),)),
+          // ]),
           SizedBox(height: 20,),
           Text('Powered by Azure', style: TextStyle(fontSize: 8,color: Colors.blue.shade900.withOpacity(0.5)),),
         ]
@@ -204,7 +208,7 @@ class _MyHomePageState extends State<MyHomePage> {
     _setFilterMode(false);
     _showProgress(true);
     try {
-      List<Profile> proList = await AzureSingle().getAllProfiles();
+      List<Profile> proList = await AzureSingle().getAllValidProfiles();
       proWidgets = [];
       for (Profile pro in proList) {
         if (pro == null) continue;
@@ -294,5 +298,11 @@ class _MyHomePageState extends State<MyHomePage> {
       _inFilterMode=bool;
       _inSearchMode=false;
     });
+  }
+
+  Future<void> _promptProfileUpdate() async {
+    SharedPreferences sp=await SharedPreferences.getInstance();
+    if(!sp.containsKey(kNameKey)||((await uGetSharedPrefValue(kNameKey)).toString()=='null'))
+      uShowOkNotification('Update your profile to become visible');
   }
 }

@@ -21,10 +21,10 @@ class AzureSingle {
     String sendUrl = '$functionsEndPoint/api/UpdateProfile?link=${profile.link}&pass=${password}&bio=${profile.bio}&id=${profile.id}&age=${profile.age}&name=${profile.name}&pic=${profile.pic}';
     Request req = Request('POST', Uri.parse(sendUrl));
     req.headers['Content-Type'] = 'application/json';
-    print(' started search upload ${req.url}');
+    // print(' started search upload ${req.url}');
     await req.send().then((value) async {
       String message= await value.stream.bytesToString();
-      print('order upload result: ${value.statusCode},  ${message}');
+      // print('order upload result: ${value.statusCode},  ${message}');
       if (value.statusCode >= 400) throw Exception(' ${message}');
     });
   }
@@ -33,10 +33,10 @@ class AzureSingle {
     String message='';
     String sendUrl = '$functionsEndPoint/api/Login?link=$link&pass=$password';
     Request req = Request('POST', Uri.parse(sendUrl));
-    print(sendUrl);
+    // print(sendUrl);
     await req.send().then((value) async {
       message= await value.stream.bytesToString();
-      print('login result:  ${value.statusCode},  ${message},  ${value.toString()},  ${value.reasonPhrase.toString()}');
+      // print('login result:  ${value.statusCode},  ${message},  ${value.toString()},  ${value.reasonPhrase.toString()}');
       if (value.statusCode >= 400) throw AuthException(' ${message}');
     });
     var data= jsonDecode(message);
@@ -47,11 +47,11 @@ class AzureSingle {
     String sendUrl = '$functionsEndPoint/api/SignUp?link=$link&pass=$password';
     Request req = Request('GET', Uri.parse(sendUrl));
     req.headers['Content-Type'] = 'application/json';
-    print(' started search upload ${req.url}');
+    // print(' started search upload ${req.url}');
     String message= '';
     await req.send().then((value) async {
       message= await value.stream.bytesToString();
-      print('sign up result:  ${value.statusCode},  ${message},  ${value.toString()},  ${value.reasonPhrase.toString()}');
+      // print('sign up result:  ${value.statusCode},  ${message},  ${value.toString()},  ${value.reasonPhrase.toString()}');
       if (value.statusCode >= 400) throw AuthException(' ${message}');
     });
     var data= jsonDecode(message);
@@ -63,27 +63,28 @@ class AzureSingle {
         headers:
         {'Content-Type': 'application/json',
           'api-key': searchKey});
-    print('market status response: ${response.body}');
+    // print('market status response: ${response.body}');
     if (response != null && response.body != null) {
       var res = jsonDecode(response.body);
       if (res['value'].length > 0) {
         return Profile.fromMap(
-            res['value'][0]); // res['value'][0]['b'].toString();
+            res['value'][0]);
       }
     }
     return null;
   }
 
-   Future<List<Profile>> getAllProfiles() async {
+   Future<List<Profile>> getAllValidProfiles() async {
+    String query="\$filter=name%20ne%20null%20and%20name%20ne%20''%20and%20name%20ne%20'null'";
     List<Profile> prolist=[];
     Response response = await get(
-        Uri.parse('$searchEndPoint/indexes/folloe-me/docs?api-version=2020-06-30-Preview&search=*'),
+        Uri.parse('$searchEndPoint/indexes/folloe-me/docs?api-version=2020-06-30-Preview&$query'),
         headers:
         {'Content-Type': 'application/json',
           'api-key': searchKey,
         'Access-Control-Allow-Origin':'*'
         });
-    print('market status response: ${response.body}');
+    // print('market status response: ${response.body}');
     if (response != null && response.body != null) {
       var res = jsonDecode(response.body);
       for(var data in res['value']){
@@ -103,7 +104,7 @@ class AzureSingle {
     'api-key': searchKey,
     'Access-Control-Allow-Origin':'*'
     });
-    print('search status response: ${response.body}');
+    // print('search status response: ${response.body}');
     if (response != null && response.body != null) {
       var res = jsonDecode(response.body);
       for(var data in res['value']){
@@ -122,7 +123,7 @@ class AzureSingle {
         headers:
         {'Content-Type': 'application/json',
           'api-key': searchKey});
-    print('search status response: ${response.body}');
+    // print('search status response: ${response.body}');
     if (response != null && response.body != null) {
       var res = jsonDecode(response.body);
       for(var data in res['value']){

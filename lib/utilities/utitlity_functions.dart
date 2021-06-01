@@ -34,7 +34,6 @@ Future<void> uSetPrefsValue(String key, var value) async {
   }
   await sp.reload();
   await sp.setString(key, value.toString());
-  // await sp.commit();
 }
 
 Future<dynamic> uGetSharedPrefValue(String key) async {
